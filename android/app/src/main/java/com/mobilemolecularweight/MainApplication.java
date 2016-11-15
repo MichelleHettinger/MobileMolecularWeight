@@ -1,4 +1,4 @@
-package com.androidtestapp;
+package com.mobilemolecularweight;
 
 import android.app.Application;
 import android.util.Log;
