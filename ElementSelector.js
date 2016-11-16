@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {AppRegistry, View, Text, Navigator} from 'react-native';
+import {AppRegistry, StyleSheet, View, Text, Navigator} from 'react-native';
 
 import ElementsArray from './ElementsArray.js';
 
@@ -12,92 +12,108 @@ export default class ElementSelector extends Component {
 
 	render(){
 
+		function findElements (userInput){
 
-		var elementObject = {
+			var listElements = [];
+			var listElements2 = [];
+			var listElements3 = [];
 
-			lettersPressed:[this.props.userInput],
-			listElements:[],
-			listElements2:[],
-			listElements3:[],
 
-			Find: function (){
-				if (this.lettersPressed.length == 1){
-					this.listElements = [];
-					for (i=0; i<ElementsArray.length;i++){
-						if (this.lettersPressed[0] == ElementsArray[i].elementName.charAt(0).toLowerCase() || this.lettersPressed[0] == ElementsArray[i].elementAcronym.charAt(0).toLowerCase()){
-							this.listElements.push(ElementsArray[i]);
-						}
-					}
-					console.log(this.listElements);
-					// this.displayElements(this.listElements);
-					return this.listElements;
-				}
-				else if (this.lettersPressed.length == 2){
-					this.listElements2 = [];
-					for (i=0;i<this.listElements.length;i++){
-						if (this.lettersPressed[1] == this.listElements[i].elementName.charAt(1) || this.lettersPressed[1] == this.listElements[i].elementAcronym.charAt(1)){
-							this.listElements2.push(this.listElements[i]);
-						}
-					}
-					console.log(this.listElements2);
-					// this.displayElements(this.listElements2);
-					return this.listElements2;
-				}
-				else if (this.lettersPressed.length == 3){
-					this.listElements3 = [];
-					for (i=0;i<this.listElements2.length;i++){
-						if (this.lettersPressed[2] == this.listElements2[i].elementName.charAt(2)){
-							this.listElements3.push(this.listElements2[i]);
-						}
-					}
-					console.log(this.listElements3);
-					// this.displayElements(this.listElements3);
-					return this.listElements3;
-				}
+			//If the user has typed in one letter
+			//Empty out the listElements array
+			//Loop through all elements,
+			//If the first letter in the elements acronym OR the elements name is equal to the user input,
+			//push that into the listElements array
+			//Log out the list and return it
+
+			//The else's follow the same logic, except the matching element comes from the listElements array
+			//and is pushed into the listElements2 array (for 2 letters).
+
+			if (userInput.length == 0){
+				return listElements;
 			}
-		};
+
+			else if (userInput.length == 1){
+				listElements = [];
+				for (i=0; i<ElementsArray.length;i++){
+					if (userInput.charAt(0) == ElementsArray[i].elementName.charAt(0).toLowerCase() || userInput.charAt(0) == ElementsArray[i].elementAcronym.charAt(0).toLowerCase()){
+						listElements.push(ElementsArray[i]);
+					}
+				}
+				console.log(listElements);
+				return listElements;
+			}
+
+			else if (userInput.length == 2){
+				listElements2 = [];
+				for (i=0;i<listElements.length;i++){
+					if (userInput.charAt(1) == listElements[i].elementName.charAt(1) || userInput.charAt(1) == listElements[i].elementAcronym.charAt(1)){
+						listElements2.push(listElements[i]);
+					}
+				}
+				console.log(listElements2);
+				return listElements2;
+			}
+
+			else if (userInput.length == 3){
+				listElements3 = [];
+				for (i=0;i<listElements2.length;i++){
+					if (userInput.charAt(2) == listElements2[i].elementName.charAt(2)){
+						listElements3.push(listElements2[i]);
+					}
+				}
+				console.log(listElements3);
+				return listElements3;
+			}
+		}
 
 
+		//Just trying to see where i can find the mobile debug log.
 		console.log("hello");
 
-		var currentElementsArray = elementObject.Find();
-
-		var listItems = currentElementsArray.map(function(element, i){
+		//Map through the array of elements found and display them
+		var elementsFound = findElements(this.props.userInput).map(function(element, i){
 			return (
-				//element.atomicNumber
-				//element.elementAcronym
-				<Text style={styles.atom} key={i}>{element.elementName}</Text>
-				//element.mass
+				
+				<View style={styles.elementDiv} key={i}>
+					<Text style={styles.elementNumber} key={i}>{element.atomicNumber}</Text>
+					<Text style={styles.elementAcronym}>{element.elementAcronym}</Text>
+					<Text style={styles.elementName}>{element.elementName}</Text>
+					<Text style={styles.elementMass}>{element.mass}</Text>
+				</View>
 			)
 		})
 
-
+		//Render the elementsFound 'div'
 		return (
 			<View>
-		        {listItems}
-			</View>
+		       {elementsFound}
+	        </View>
 		)
 	}
 }
 
 const styles = StyleSheet.create({
-  elementNumber: {
-    color: 'red',
-  },
 
-  elementAcronym: {
+	elementDiv:{
+		width: 100,
+		borderRadius: 4,
+		borderWidth: 0.75,
+		borderColor: 'black',
 
-  },
+	},
+	elementNumber: {
 
-  elementName: {
-    color: 'blue',
-    fontWeight: 'bold',
-    fontSize: 30,
-  },
+	},
+	elementAcronym: {
 
-  elementMass: {
+	},
+	elementName: {
 
-  }
+	},
+	elementMass: {
+
+	}
 
 });
 
