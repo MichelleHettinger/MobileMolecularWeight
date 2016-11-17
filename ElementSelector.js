@@ -111,10 +111,11 @@ const styles = StyleSheet.create({
 		width: 440*0.8,
 
 		marginBottom:0,
+		marginLeft: 5,
 
-			// borderRadius: 4,
-			// borderWidth: 1,
-			// borderColor: 'black',
+			borderRadius: 4,
+			borderWidth: 1,
+			borderColor: 'black',
 
 	},
 

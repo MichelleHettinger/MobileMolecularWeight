@@ -68,15 +68,16 @@ export default class ExampleComponent extends Component {
 const styles = StyleSheet.create({
 
 	button:{
-		fontSize: 20,
+
 		color: "white",
 		backgroundColor: "grey",
-		width: 30,
-		height: 35,
+
+		width: 30*0.85,
+		height: 35*0.85,
+		fontSize: 20*0.85,
 
 		paddingTop: 2.5,
 		paddingBottom: 5,
-
 		marginLeft: 5,
 		marginBottom: 5,
 	},
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
 	allRows: {
 		position: 'absolute',
 		bottom: -250,
-		left: 12,
+		left: 30,
 
 	},
 
@@ -94,11 +95,11 @@ const styles = StyleSheet.create({
 	},
 
 	row2: {
-		marginLeft: 15,
+		marginLeft: 15*0.85,
 	},
 
 	row3: {
-		marginLeft: 35,
+		marginLeft: 35*0.85,
 	}
 
 
