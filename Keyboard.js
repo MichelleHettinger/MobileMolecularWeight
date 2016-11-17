@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import Button from 'react-native-button';
 import {View, StyleSheet} from 'react-native';
 
-export default class ExampleComponent extends Component {
+import ElementSelector from './ElementSelector.js';
+
+export default class KeyboardComponent extends Component {
   constructor(props, context) {
     super(props, context);
   }
-  _handlePress() {
-    console.log('Pressed!');
+  _handlePress(input) {
+  	this.props.changeState(input)
+    // console.log('Pressed: ' + input);
   }
+
   render() {
 
   	var keyRow1 = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
@@ -22,11 +26,13 @@ export default class ExampleComponent extends Component {
 	      	key={i}
 	        style={[styles.button]}
 	        styleDisabled={{color: 'red'}}
-	        onPress={() => this._handlePress()}>
+	        onPress={() => this._handlePress(letter.toLowerCase())}>
+
 	        {letter.toUpperCase()}
+
 	      </Button>
 	    );
-  	});
+  	}.bind(this));
 
   	var mapRow2 = keyRow2.map(function(letter, i){
 	    return (
@@ -34,11 +40,11 @@ export default class ExampleComponent extends Component {
 	      	key={i}
 	        style={[styles.button]}
 	        styleDisabled={{color: 'red'}}
-	        onPress={() => this._handlePress()}>
+	        onPress={() => this._handlePress(letter.toLowerCase())}>
 	        {letter.toUpperCase()}
 	      </Button>
 	    );
-  	});
+  	}.bind(this));
 
   	var mapRow3 = keyRow3.map(function(letter, i){
 	    return (
@@ -46,13 +52,11 @@ export default class ExampleComponent extends Component {
 	      	key={i}
 	        style={[styles.button]}
 	        styleDisabled={{color: 'red'}}
-	        onPress={() => this._handlePress()}>
+	        onPress={() => this._handlePress(letter.toLowerCase())}>
 	        {letter.toUpperCase()}
 	      </Button>
 	    );
-  	});
-
-
+  	}.bind(this));
 
 
     return (

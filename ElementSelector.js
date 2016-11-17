@@ -84,7 +84,7 @@ export default class ElementSelector extends Component {
 					<Text style={[styles.elementNumber, styles.elementFont]} key={i}>{element.atomicNumber}</Text>
 					<Text style={[styles.elementAcronym, styles.elementFont]}>{element.elementAcronym}</Text>
 					<Text style={[styles.elementName, styles.elementFont]}>{element.elementName}</Text>
-					<Text style={[styles.elementMass, styles.elementFont]}>{element.mass.toFixed(3)}</Text>
+					<Text style={[styles.elementMass, styles.elementFont]}>{element.mass}</Text>
 				</View>
 			)
 		})

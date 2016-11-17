@@ -5,27 +5,43 @@ import ElementSelector from './ElementSelector.js';
 import Keyboard from './Keyboard.js';
 
 class UserInputToElement extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {text: ''};
-  }
+	constructor(props) {
+		super(props);
+		this.state = {text: ''};
 
-  render() {
-    return (
-      <View style={{padding: 10}}>
-        <TextInput
-          style={{height: 40}}
-          placeholder="Type here to find an element!"
-          onChangeText={(text) => this.setState({text})}
-        />
+		this.changeState = this.changeState.bind(this);
+	}
 
-        <ElementSelector userInput={this.state.text}/>
 
-        <Keyboard/>
+	changeState(newText){
+		console.log("----------------------")
+		console.log(this.state.text)
+		console.log(newText)
 
-      </View>
-    );
-  }
+		if (newText == '<-'){
+			totalText = this.state.text.slice(0, -1)
+		}
+		else {
+			totalText = this.state.text + newText;
+		}
+
+		this.setState({
+			text: totalText
+		})
+	}
+
+	render() {
+		return (
+		  <View style={{padding: 10}}>
+		   
+
+		    <ElementSelector userInput={this.state.text}/>
+
+		    <Keyboard changeState={this.changeState}/>
+
+		  </View>
+		);
+	}
 }
 
 
