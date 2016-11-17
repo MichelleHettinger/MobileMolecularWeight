@@ -76,16 +76,15 @@ export default class ElementSelector extends Component {
 
 		}
 
-
 		//Map through the array of elements found and display them
 		var elementsFound = findElements(this.props.userInput).map(function(element, i){
 			return (
 				
 				<View style={styles.elementDiv} key={i}>
-					<Text style={styles.elementNumber} key={i}>{element.atomicNumber}</Text>
-					<Text style={styles.elementAcronym}>{element.elementAcronym}</Text>
-					<Text style={styles.elementName}>{element.elementName}</Text>
-					<Text style={styles.elementMass}>{element.mass.toFixed(3)}</Text>
+					<Text style={[styles.elementNumber, styles.elementFont]} key={i}>{element.atomicNumber}</Text>
+					<Text style={[styles.elementAcronym, styles.elementFont]}>{element.elementAcronym}</Text>
+					<Text style={[styles.elementName, styles.elementFont]}>{element.elementName}</Text>
+					<Text style={[styles.elementMass, styles.elementFont]}>{element.mass.toFixed(3)}</Text>
 				</View>
 			)
 		})
@@ -103,38 +102,59 @@ export default class ElementSelector extends Component {
 const styles = StyleSheet.create({
 
 	allElements: {
-		marginLeft: 8,
 		flexWrap: 'wrap',
 		flexDirection: 'row',
+
+
+
+		height: 280*0.8,
+		width: 440*0.8,
+
+		marginBottom:0,
+
+			// borderRadius: 4,
+			// borderWidth: 1,
+			// borderColor: 'black',
+
 	},
 
+	elementFont: {
+		color: "black",
+		fontFamily: "Helvetica",
+
+	},
 
 	elementDiv:{
-		width: 80,
-		height: 80,
+		width: 80*0.8,
+		height: 80*0.8,
+		marginTop: 2,
 		marginLeft: 5,
+		marginRight:0,
+		marginTop:5,
 		marginBottom: 5,
 
 		borderRadius: 4,
 		borderWidth: 1,
 		borderColor: 'black',
 
+		backgroundColor: '#499AB5FF',
+
 	},
 	elementNumber: {
-		fontSize: 10,
+		fontSize: 10*0.8,
 		marginLeft: 2,
 	},
 	elementAcronym: {
 		textAlign: "center",
-		fontSize: 18,
+		fontSize: 18*0.8,
 	},
 	elementName: {
 		textAlign: "center",
-		fontSize: 15,
+		fontSize: 15*0.8,
 	},
 	elementMass: {
 		textAlign: "center",
-		fontSize: 12,
+		fontSize: 12*0.8,
 	}
 
 });
