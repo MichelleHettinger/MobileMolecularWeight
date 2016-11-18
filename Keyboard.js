@@ -9,8 +9,7 @@ export default class KeyboardComponent extends Component {
     super(props, context);
   }
   _handlePress(input) {
-  	this.props.changeState(input)
-    // console.log('Pressed: ' + input);
+  	this.props.newKeyPress(input)
   }
 
   render() {
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
 
 	allRows: {
 		position: 'absolute',
-		bottom: -250,
+		bottom: -290,
 		left: 30,
 
 	},

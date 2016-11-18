@@ -3,18 +3,21 @@ import { AppRegistry, Text, TextInput, View } from 'react-native';
 
 import ElementSelector from './ElementSelector.js';
 import Keyboard from './Keyboard.js';
+import Calculator from './Calculator.js';
 
 class UserInputToElement extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {text: ''};
+		this.state = {text: '', elements: [], multiplier:[]};
 
-		this.changeState = this.changeState.bind(this);
+		this.getKeypress = this.getKeypress.bind(this);
+		this.getElement = this.getElement.bind(this);
 	}
 
 
-	changeState(newText){
+	getKeypress(newText){
 		console.log("----------------------")
+		console.log("User pressed a letter")
 		console.log(this.state.text)
 		console.log(newText)
 
@@ -30,14 +33,31 @@ class UserInputToElement extends Component {
 		})
 	}
 
+	getElement(newElement){
+		console.log("----------------------");
+		console.log("User selected an element");
+		console.log(newElement);
+
+		this.state.elements.push(newElement);
+		this.state.multiplier.push(1);
+
+
+		console.log(this.state.elements);
+		console.log(this.state.multiplier);
+
+
+	}
+
 	render() {
 		return (
+
 		  <View style={{padding: 10}}>
 		   
+		    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
 
-		    <ElementSelector userInput={this.state.text}/>
+		    <Calculator selectedElements={this.state.elements} elementMultipliers={this.state.multiplier}/>
 
-		    <Keyboard changeState={this.changeState}/>
+		    <Keyboard newKeyPress={this.getKeypress}/>
 
 		  </View>
 		);

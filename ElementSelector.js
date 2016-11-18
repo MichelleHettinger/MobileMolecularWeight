@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {AppRegistry, StyleSheet, View, Text, Navigator} from 'react-native';
+import Button from 'react-native-button';
 
 import ElementsArray from './ElementsArray.js';
 
@@ -8,6 +9,10 @@ export default class ElementSelector extends Component {
 		return {
 			title: 'Something'
 		}; 
+	}
+
+	_handlePress(input) {
+		this.props.newElement(input)
 	}
 
 	render(){
@@ -50,8 +55,7 @@ export default class ElementSelector extends Component {
 						}	
 					}
 				}
-
-				
+			
 			}
 
 			//Depending on how many letters were typed in, display the appropriate array
@@ -79,15 +83,16 @@ export default class ElementSelector extends Component {
 		//Map through the array of elements found and display them
 		var elementsFound = findElements(this.props.userInput).map(function(element, i){
 			return (
-				
-				<View style={styles.elementDiv} key={i}>
-					<Text style={[styles.elementNumber, styles.elementFont]} key={i}>{element.atomicNumber}</Text>
-					<Text style={[styles.elementAcronym, styles.elementFont]}>{element.elementAcronym}</Text>
-					<Text style={[styles.elementName, styles.elementFont]}>{element.elementName}</Text>
-					<Text style={[styles.elementMass, styles.elementFont]}>{element.mass}</Text>
-				</View>
+				<Button key={i} onPress={() => this._handlePress(element)}>
+					<View style={styles.elementDiv} key={i}>
+						<Text style={[styles.elementNumber, styles.elementFont]} key={i}>{element.atomicNumber}</Text>
+						<Text style={[styles.elementAcronym, styles.elementFont]}>{element.elementAcronym}</Text>
+						<Text style={[styles.elementName, styles.elementFont]}>{element.elementName}</Text>
+						<Text style={[styles.elementMass, styles.elementFont]}>{element.mass.toFixed(3)}</Text>
+					</View>
+				</Button>
 			)
-		})
+		}.bind(this))
 
 		//Render the elementsFound 'div'
 		return (
