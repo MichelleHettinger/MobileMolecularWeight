@@ -15,7 +15,6 @@ export default class ElementCalculator extends Component {
 		};
 	}
 
-
 	_handlePress(input, i) {
 		if (input == '+'){
 			console.log("one more atom")
@@ -58,8 +57,6 @@ const styles = StyleSheet.create({
 		width: 30*1.3,
 		height: 50*1.3 ,
 
-
-
 			borderRadius: 4,
 			borderWidth: 1,
 			borderColor: 'black',
@@ -81,7 +78,6 @@ const styles = StyleSheet.create({
 
 	},
 
-
 	calculationPanel: {
 		flexWrap: 'wrap',
 		flexDirection: 'row',
@@ -97,7 +93,4 @@ const styles = StyleSheet.create({
 			borderWidth: 1,
 			borderColor: 'black',
 	},
-
-
-
 });
