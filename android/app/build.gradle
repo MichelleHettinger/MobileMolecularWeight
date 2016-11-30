@@ -106,8 +106,13 @@ android {
     }
     buildTypes {
         release {
+            debuggable false
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+
+        debug {
+            debuggable true
         }
     }
     // applicationVariants are e.g. debug, release

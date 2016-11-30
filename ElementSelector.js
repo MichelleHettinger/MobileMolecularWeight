@@ -63,15 +63,15 @@ export default class ElementSelector extends Component {
 				return listElements;
 			}
 			else if (userInput.length == 1){
-				console.log(listElements);
+				//console.log(listElements);
 				return listElements;
 			}
 			else if (userInput.length == 2){
-				console.log(listElements2);
+				//console.log(listElements2);
 				return listElements2;
 			}
 			else if (userInput.length == 3){
-				console.log(listElements3);
+				//console.log(listElements3);
 				return listElements3;
 			}
 			else if (userInput.length >= 4){
@@ -83,7 +83,7 @@ export default class ElementSelector extends Component {
 		//Map through the array of elements found and display them
 		var elementsFound = findElements(this.props.userInput).map(function(element, i){
 			return (
-				<Button key={i} onPress={() => this._handlePress(element)}>
+				<Button containerStyle={{height:80}} key={i} onPress={() => this._handlePress(element)}>
 					<View style={styles.elementDiv} key={i}>
 						<Text style={[styles.elementNumber, styles.elementFont]} key={i}>{element.atomicNumber}</Text>
 						<Text style={[styles.elementAcronym, styles.elementFont]}>{element.elementAcronym}</Text>
@@ -113,10 +113,10 @@ const styles = StyleSheet.create({
 
 
 		height: 280*0.8,
-		width: 440*0.8,
+		width: 430*0.8,
 
 		marginBottom:0,
-		marginLeft: 5,
+		marginLeft: 0,
 
 			borderRadius: 4,
 			borderWidth: 1,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 		marginRight:0,
 		marginTop:5,
-		marginBottom: 5,
+		marginBottom: 2,
 
 		borderRadius: 4,
 		borderWidth: 1,
@@ -146,6 +146,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#499AB5FF',
 
 	},
+
+
 	elementNumber: {
 		fontSize: 10*0.8,
 		marginLeft: 2,

@@ -8,37 +8,43 @@ export default class ElementCalculator extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedAtoms:[],
+			selectedAtoms: [],
 			atomMultiplier:[],
 			total:0,
 			baseTotal: 0,
 		};
 	}
 
-	_handlePress(input, i) {
-		if (input == '+'){
-			console.log("one more atom")
 
-			console.log(this.state.selectedAtoms)
+	calculate(){
+		for (var i=0; this.state.selectedAtoms[i].length; i++){
+			this.state.total += this.props.selectedAtoms[i].mass * this.state.atomMultiplier[i];
+		}
 
-		}
-		else if (input == '-'){
-			console.log("one less atom")
-		}
+		console.log("Calculated total: " + this.state.total);
+	}
+
+
+
+	_handlePress(input, element, i) {
+
+		this.props.newEdit(input, element, i);
+
 	}
 
 	render(){
 
+		// Upon tapping a selected atom, loop all atoms
 		var elementsToDisplay = this.props.selectedElements.map(function(element, i){
 
 			return (
 				<View key={i} style={[styles.elementDiv]}>
-					<Button key={i} onPress={() => this._handlePress('+', i)} style={[styles.plusMinus]}> + </Button>
+					<Button key={i} onPress={() => this._handlePress('+', element, i)} style={[styles.plus]}> + </Button>
 
 					<Text style={[styles.acronym]}>{element.elementAcronym}</Text>
-					<Text style={[styles.subscript]}>{this.state.atomMultiplier[i]}</Text>
+					<Text style={[styles.subscript]}>{this.props.elementMultipliers[i]}</Text>
 
-					<Button onPress={() => this._handlePress("-")} style={[styles.plusMinus]}> - </Button>
+					<Button onPress={() => this._handlePress("-", element, i)} style={[styles.minus]}> - </Button>
 				</View>
 			)
 		}.bind(this))
@@ -46,7 +52,13 @@ export default class ElementCalculator extends Component {
 		return (
 			<View style={[styles.calculationPanel]}>
 				{elementsToDisplay}
+
+				<Text>
+					{this.state.total.toFixed(3)}
+				</Text>
+
 			</View>
+
 		)
 	}
 }
@@ -63,9 +75,17 @@ const styles = StyleSheet.create({
 
 	},
 
-	plusMinus: {
+	plus: {
 		margin: 0,
 		fontSize: 10*1.3,
+	},
+
+	minus: {
+		position: "relative",
+		top: -10,
+		color: 'red',
+		fontSize: 15,
+
 	},
 
 	acronym: {
@@ -76,6 +96,15 @@ const styles = StyleSheet.create({
 
 	subscript: {
 
+		position: 'relative',
+		left: 25,
+		top: -5,
+
+		fontSize: 10,
+
+		height: 12,
+		width: 12,
+
 	},
 
 	calculationPanel: {
@@ -83,8 +112,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 
 		height: 150,
-		width: 440*0.8,
-		marginLeft: 5,
+		width: 430*0.8,
+		marginLeft: 0,
 
 		position: 'absolute',
 		top: 250,

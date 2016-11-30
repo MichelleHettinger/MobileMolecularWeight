@@ -24,7 +24,6 @@ export default class KeyboardComponent extends Component {
 	      <Button
 	      	key={i}
 	        style={[styles.button]}
-	        styleDisabled={{color: 'red'}}
 	        onPress={() => this._handlePress(letter.toLowerCase())}>
 
 	        {letter.toUpperCase()}
