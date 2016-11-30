@@ -3,12 +3,13 @@ import { AppRegistry, Text, TextInput, View } from 'react-native';
 
 import ElementSelector from './ElementSelector.js';
 import Keyboard from './Keyboard.js';
-import CalculatorPanel from './Calculator.js';
+import CalculatorPanel from './CalcPanel.js';
+
 
 class UserInputToElement extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {text: '', elements: [], multiplier:[]};
+		this.state = {text: '', elements: [], multiplier:[], total: 0};
 
 		this.getKeypress = this.getKeypress.bind(this);
 		this.getElement = this.getElement.bind(this);
@@ -18,7 +19,6 @@ class UserInputToElement extends Component {
 
 	getKeypress(newText){
 		console.log("------------------------------------------");
-		console.log(this)
 		console.log("User pressed: " + newText)
 
 		if (newText == '<-'){
@@ -35,41 +35,43 @@ class UserInputToElement extends Component {
 		})
 
 		console.log(this.state)
-
 	}
 
 	getElement(newElement){
 		console.log("------------------------------------------");
-		console.log("User selected an element");
-		console.log(newElement);
+		console.log("User selected " + newElement.elementName);
 
+		// Push the element and multiplier into their respective arrays
 		this.state.elements.push(newElement);
 		this.state.multiplier.push(1);
 
+		this.state.total += newElement.mass;
+
 		console.log(this.state)
-
 	}
-
-
 	getEdit(input, element, i){
 		console.log("------------------------------------------");
-		
 		console.log(input + " one " + element.elementName + " at position: " + i);
+
+		console.log(i)
 
 		if (input == '+'){
 			this.state.multiplier[i] += 1;
+			this.state.total += element.mass;
 		}
 		else if (input == '-'){
 			this.state.multiplier[i] -= 1;
+			this.state.total -= element.mass;
+
+
 		}
 
+			if (this.state.multiplier[i] == 0){
 
-		if (this.state.multiplier[i] == 0){
-
-			this.state.multiplier.pop(i);
-			this.state.elements.pop(i);
-		}
-		
+				this.state.multiplier.pop(i);
+				this.state.elements.pop(i);
+			}
+			
 		console.log(this.state);
 	}
 
@@ -81,7 +83,7 @@ class UserInputToElement extends Component {
 		   
 		    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
 
-		    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} newEdit={this.getEdit}/>
+		    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} total={this.state.total} newEdit={this.getEdit} />
 
 		    <Keyboard newKeyPress={this.getKeypress}/>
 

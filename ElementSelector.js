@@ -5,18 +5,13 @@ import Button from 'react-native-button';
 import ElementsArray from './ElementsArray.js';
 
 export default class ElementSelector extends Component {
-	static get defaultProps(){
-		return {
-			title: 'Something'
-		}; 
+	constructor(props) {
+		super(props);
 	}
-
 	_handlePress(input) {
 		this.props.newElement(input)
 	}
-
 	render(){
-
 		function findElements (userInput){
 
 			var listElements = [];
@@ -77,7 +72,6 @@ export default class ElementSelector extends Component {
 			else if (userInput.length >= 4){
 				return listElements3;
 			}
-
 		}
 
 		//Map through the array of elements found and display them
@@ -166,50 +160,3 @@ const styles = StyleSheet.create({
 	}
 
 });
-
-
-
-
-
-// var elementsPanel = {
-// 	backSpace: function(){
-// 		$("#elements-found").empty();
-
-// 		if (this.lettersPressed.length > 0){
-// 			this.lettersPressed.pop();
-
-// 			console.log("After deleting: " + this.lettersPressed);
-// 			console.log(this.lettersPressed);
-
-// 			$("#current-letters").text(this.lettersPressed.join(" "));
-
-// 			this.findElement();
-// 		}
-// 		if (this.lettersPressed.length == 0){
-// 			$("#current-letters").text("Search");
-// 		}
-// 	},
-// 	displayElements: function(elementsArray){
-// 		$("#elements-found").empty();
-
-// 		for(var i=0; i<elementsArray.length; i++){
-
-// 			var elementP = 
-// 			$(
-// 				"<p id='atomic-number-p'>" + elementsArray[i].atomicNumber + "</p>" +
-// 				"<h2 id='acronym-h2'>" + elementsArray[i].elementAcronym + "</h2>" +
-// 				"<p id='name-p'>" + elementsArray[i].elementName + "</p>" +
-// 				"<p id='mass-p'>" + elementsArray[i].mass + "</p>"
-// 			);
-
-
-// 			var elementDiv = $("<div>");
-// 			elementDiv.addClass("col-sm-4 clickableElement box");
-// 			elementDiv.attr("data-atom", elementsArray[i].atomicNumber);
-// 			elementDiv.append(elementP);
-
-
-// 			$("#elements-found").append(elementDiv);
-// 		}
-// 	},
-// }

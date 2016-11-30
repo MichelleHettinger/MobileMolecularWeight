@@ -2,37 +2,18 @@ import React, { Component } from 'react';
 import Button from 'react-native-button';
 import {StyleSheet, View, Text} from 'react-native';
 
-// import ElementsArray from './ElementsArray.js';
-
 export default class ElementCalculator extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			selectedAtoms: [],
-			atomMultiplier:[],
-			total:0,
-			baseTotal: 0,
-		};
 	}
-
-
-	calculate(){
-		for (var i=0; this.state.selectedAtoms[i].length; i++){
-			this.state.total += this.props.selectedAtoms[i].mass * this.state.atomMultiplier[i];
-		}
-
-		console.log("Calculated total: " + this.state.total);
-	}
-
-
 
 	_handlePress(input, element, i) {
-
 		this.props.newEdit(input, element, i);
-
 	}
 
+
 	render(){
+
 
 		// Upon tapping a selected atom, loop all atoms
 		var elementsToDisplay = this.props.selectedElements.map(function(element, i){
@@ -54,7 +35,7 @@ export default class ElementCalculator extends Component {
 				{elementsToDisplay}
 
 				<Text>
-					{this.state.total.toFixed(3)}
+					{this.props.total.toFixed(3)}
 				</Text>
 
 			</View>
