@@ -66,11 +66,12 @@ class UserInputToElement extends Component {
 
 		}
 
-			if (this.state.multiplier[i] == 0){
-
-				this.state.multiplier.pop(i);
-				this.state.elements.pop(i);
+		for (var j=0; j<this.state.multiplier.length; j++){
+			if (this.state.multiplier[j] == 0){
+				this.state.multiplier.splice(j, 1);
+				this.state.elements.splice(j, 1);
 			}
+		}
 			
 		console.log(this.state);
 	}
