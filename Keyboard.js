@@ -74,9 +74,9 @@ const styles = StyleSheet.create({
 		color: "white",
 		backgroundColor: "grey",
 
-		width: 30*0.85,
-		height: 35*0.85,
-		fontSize: 20*0.85,
+		width: 30*0.95,
+		height: 35*0.95,
+		fontSize: 20*0.95,
 
 		paddingTop: 2.5,
 		paddingBottom: 5,
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
 
 
 	allRows: {
-		position: 'absolute',
-		bottom: -290,
-		left: 30,
+		position: 'relative',
+		bottom: 0,
+		left: 0,
 
 	},
 
@@ -97,10 +97,10 @@ const styles = StyleSheet.create({
 	},
 
 	row2: {
-		marginLeft: 15*0.85,
+		marginLeft: 15*0.95,
 	},
 
 	row3: {
-		marginLeft: 35*0.85,
+		marginLeft: 35*0.95,
 	}
 });

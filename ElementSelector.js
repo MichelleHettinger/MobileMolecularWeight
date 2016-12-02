@@ -106,10 +106,10 @@ const styles = StyleSheet.create({
 
 
 
-		height: 280*0.8,
-		width: 430*0.8,
+		height: 280*0.87,
+		width: 370*0.87,
 
-		marginBottom:0,
+		marginBottom:10,
 		marginLeft: 0,
 
 			borderRadius: 4,
@@ -125,13 +125,13 @@ const styles = StyleSheet.create({
 	},
 
 	elementDiv:{
-		width: 80*0.8,
-		height: 80*0.8,
+		width: 80*0.87,
+		height: 80*0.87,
 		marginTop: 2,
-		marginLeft: 5,
+		marginLeft: 8,
 		marginRight:0,
-		marginTop:5,
-		marginBottom: 2,
+		marginTop:2,
+		marginBottom: 0,
 
 		borderRadius: 4,
 		borderWidth: 1,
@@ -143,20 +143,20 @@ const styles = StyleSheet.create({
 
 
 	elementNumber: {
-		fontSize: 10*0.8,
+		fontSize: 10*0.87,
 		marginLeft: 2,
 	},
 	elementAcronym: {
 		textAlign: "center",
-		fontSize: 18*0.8,
+		fontSize: 18*0.87,
 	},
 	elementName: {
 		textAlign: "center",
-		fontSize: 15*0.8,
+		fontSize: 15*0.87,
 	},
 	elementMass: {
 		textAlign: "center",
-		fontSize: 12*0.8,
+		fontSize: 12*0.87,
 	}
 
 });

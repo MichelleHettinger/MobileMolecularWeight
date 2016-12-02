@@ -6,15 +6,10 @@ export default class ElementCalculator extends Component {
 	constructor(props) {
 		super(props);
 	}
-
 	_handlePress(input, element, i) {
 		this.props.newEdit(input, element, i);
 	}
-
-
 	render(){
-
-
 		// Upon tapping a selected atom, loop all atoms
 		var elementsToDisplay = this.props.selectedElements.map(function(element, i){
 
@@ -32,11 +27,11 @@ export default class ElementCalculator extends Component {
 
 		return (
 			<View style={[styles.calculationPanel]}>
-				{elementsToDisplay}
-
-				<Text>
-					{this.props.total.toFixed(3)}
+				<Text style={[styles.MWT]}>
+					Molecular Weight: {this.props.total.toFixed(3)} g/mol
 				</Text>
+
+				{elementsToDisplay}
 
 			</View>
 
@@ -46,9 +41,21 @@ export default class ElementCalculator extends Component {
 
 const styles = StyleSheet.create({
 
+	MWT: {
+		marginBottom: 1,
+		height: 20,
+		width: 220*1.5,
+		textAlign: "center",
+
+
+	},
+
 	elementDiv: {
-		width: 30*1.3,
-		height: 50*1.3 ,
+		width: 30*1.5,
+		height: 50*1.5 ,
+
+		marginTop: 2,
+		marginLeft: 1.5,
 
 			borderRadius: 4,
 			borderWidth: 1,
@@ -58,7 +65,7 @@ const styles = StyleSheet.create({
 
 	plus: {
 		margin: 0,
-		fontSize: 10*1.3,
+		fontSize: 10*1.5,
 	},
 
 	minus: {
@@ -71,15 +78,15 @@ const styles = StyleSheet.create({
 
 	acronym: {
 		marginLeft: 8,
-		fontSize: 15 *1.3,
+		fontSize: 13 *1.5,
 		margin: 0,
 	},
 
 	subscript: {
 
 		position: 'relative',
-		left: 25,
-		top: -5,
+		left: 30,
+		top: -10,
 
 		fontSize: 10,
 
@@ -92,12 +99,14 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		flexDirection: 'row',
 
-		height: 150,
-		width: 430*0.8,
+		height: 120*1.5,
+		width: 220*1.5,
+
+		marginBottom: 10,
 		marginLeft: 0,
 
-		position: 'absolute',
-		top: 250,
+		position: 'relative',
+		top: 0,
 
 			borderRadius: 4,
 			borderWidth: 1,

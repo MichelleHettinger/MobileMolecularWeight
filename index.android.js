@@ -15,8 +15,6 @@ class UserInputToElement extends Component {
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
 	}
-
-
 	getKeypress(newText){
 		console.log("------------------------------------------");
 		console.log("User pressed: " + newText)
@@ -36,7 +34,6 @@ class UserInputToElement extends Component {
 
 		console.log(this.state)
 	}
-
 	getElement(newElement){
 		console.log("------------------------------------------");
 		console.log("User selected " + newElement.elementName);
@@ -47,7 +44,13 @@ class UserInputToElement extends Component {
 
 		this.state.total += newElement.mass;
 
-		console.log(this.state)
+		this.setState({
+			total: this.state.total,
+			elements: this.state.elements,
+			multiplier: this.state.multiplier
+		});
+
+		console.log(this.state);
 	}
 	getEdit(input, element, i){
 		console.log("------------------------------------------");
@@ -62,8 +65,6 @@ class UserInputToElement extends Component {
 		else if (input == '-'){
 			this.state.multiplier[i] -= 1;
 			this.state.total -= element.mass;
-
-
 		}
 
 		for (var j=0; j<this.state.multiplier.length; j++){
@@ -72,10 +73,15 @@ class UserInputToElement extends Component {
 				this.state.elements.splice(j, 1);
 			}
 		}
-			
+
+		this.setState({
+			total: this.state.total,
+			elements: this.state.elements,
+			multiplier: this.state.multiplier
+		})
+
 		console.log(this.state);
 	}
-
 
 	render() {
 		return (
