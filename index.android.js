@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, TextInput, View } from 'react-native';
+import Firebase from 'firebase';
 
-import ElementSelector from './ElementSelector.js';
-import Keyboard from './Keyboard.js';
-import CalculatorPanel from './CalcPanel.js';
+import ElementSelector from './Components/ElementSelector.js';
+import Keyboard from './Components/Keyboard.js';
+import CalculatorPanel from './Components/CalcPanel.js';
 
 
 class UserInputToElement extends Component {
