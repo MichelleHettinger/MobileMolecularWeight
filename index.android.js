@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, TextInput, View } from 'react-native';
-import Firebase from 'firebase';
 
 import ElementSelector from './Components/ElementSelector.js';
 import Keyboard from './Components/Keyboard.js';
