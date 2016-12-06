@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, TextInput, View } from 'react-native';
 import Button from 'react-native-button';
 
-//Post-login page
-import Main from './Main';
-
-//Firebase
-import Firebase from 'firebase';
-let app = new Firebase("https://mobile-molecular-weight-85984.firebaseio.com/");
-
 export default class signup extends Component {
 
   constructor(props){

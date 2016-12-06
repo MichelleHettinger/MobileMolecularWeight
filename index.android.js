@@ -1,103 +1,83 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, TextInput, View } from 'react-native';
-
-import ElementSelector from './Components/ElementSelector.js';
-import Keyboard from './Components/Keyboard.js';
-import CalculatorPanel from './Components/CalcPanel.js';
+import { AppRegistry, Navigator, Text, View } from 'react-native';
+import Button from 'react-native-button';
 
 
-class UserInputToElement extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {text: '', elements: [], multiplier:[], total: 0};
 
-		this.getKeypress = this.getKeypress.bind(this);
-		this.getElement = this.getElement.bind(this);
-		this.getEdit = this.getEdit.bind(this);
-	}
-	getKeypress(newText){
-		console.log("------------------------------------------");
-		console.log("User pressed: " + newText)
+import Splash from './Components/Splash.js';
+import Main from './Components/Main/Main.js';
 
-		if (newText == '<-'){
-			var totalText = this.state.text.slice(0, -1)
-		}
-		else {
-			var totalText = this.state.text + newText;
-		}
+import Login from './Components/Auth/Login.js';
+import Signup from './Components/Auth/Signup.js';
 
-		this.state.text = totalText;
 
-		this.setState({
-			text: totalText,
-		})
 
-		console.log(this.state)
-	}
-	getElement(newElement){
-		console.log("------------------------------------------");
-		console.log("User selected " + newElement.elementName);
+class ChemistryApp extends Component {
 
-		// Push the element and multiplier into their respective arrays
-		this.state.elements.push(newElement);
-		this.state.multiplier.push(1);
+	render (){
 
-		this.state.total += newElement.mass;
-
-		this.setState({
-			total: this.state.total,
-			elements: this.state.elements,
-			multiplier: this.state.multiplier
-		});
-
-		console.log(this.state);
-	}
-	getEdit(input, element, i){
-		console.log("------------------------------------------");
-		console.log(input + " one " + element.elementName + " at position: " + i);
-
-		console.log(i)
-
-		if (input == '+'){
-			this.state.multiplier[i] += 1;
-			this.state.total += element.mass;
-		}
-		else if (input == '-'){
-			this.state.multiplier[i] -= 1;
-			this.state.total -= element.mass;
-		}
-
-		for (var j=0; j<this.state.multiplier.length; j++){
-			if (this.state.multiplier[j] == 0){
-				this.state.multiplier.splice(j, 1);
-				this.state.elements.splice(j, 1);
-			}
-		}
-
-		this.setState({
-			total: this.state.total,
-			elements: this.state.elements,
-			multiplier: this.state.multiplier
-		})
-
-		console.log(this.state);
-	}
-
-	render() {
 		return (
+			<Navigator
 
-		  <View style={{padding: 10}}>
-		   
-		    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
+				initialRoute={{id: 'SplashPage', name: 'Index'}}
+				renderScene = {this.renderScene.bind(this)}
 
-		    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} total={this.state.total} newEdit={this.getEdit} />
+				configureScene={(route) => {
 
-		    <Keyboard newKeyPress={this.getKeypress}/>
+					if (route.sceneConfig){
+						return route.sceneConfig;
+					}
 
-		  </View>
-		);
+					return Navigator.SceneConfigs.FloatFromRight;
+
+				}}
+			/>
+		)
 	}
+
+
+	renderScene(route, navigator){
+		var routeId = route.id;
+
+		if (routeId === 'SplashPage'){
+			return (
+				<Splash navigator={navigator} />
+			)
+		};
+		if (routeId === 'MainPage'){
+			return (
+				<Main navigator={navigator} />
+			)
+		};
+		if (routeId === 'LoginPage'){
+			return (
+				<Login navigator={navigator} />
+			)
+		};
+
+		if (routeId === 'SignupPage'){
+			return (
+				<Login navigator={navigator} />
+			)
+		};
+
+		//return this.noRoute(navigator);
+
+	}
+
+
+	noRoute(navigator){
+		return (
+			<View>
+				<Button onPress={()=>navigator.pop()}>
+					<Text>Go back</Text>
+				</Button>
+			</View>
+
+		)
+	}
+
 }
 
 
-AppRegistry.registerComponent('MobileMolecularWeight', () => UserInputToElement);
+AppRegistry.registerComponent('MobileMolecularWeight', () => ChemistryApp);
