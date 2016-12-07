@@ -89,4 +89,4 @@ export default class signup extends Component {
   }
 }
 
-AppRegistry.registerComponent('signup', () => signup);
+//AppRegistry.registerComponent('signup', () => signup);

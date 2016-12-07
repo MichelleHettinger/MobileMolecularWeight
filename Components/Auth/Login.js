@@ -19,7 +19,7 @@ export default class login extends Component {
 
   constructor(props){
     super(props);
-    this.itemsRef = firebase.database().ref();
+    //this.auth = firebase.auth();
 
     this.state = {
       email: '',
@@ -52,6 +52,7 @@ export default class login extends Component {
           placeholder={"Password"}
         />
 
+        <Button onPress={this.login.bind(this)}><Text>Login</Text></Button>
 
       </View>
 
@@ -59,29 +60,56 @@ export default class login extends Component {
   }
 
   login(){
-
     this.setState({
-      loaded: false
+      loading: true
     });
 
-    firebase.authWithPassword({
-      "email": this.state.email,
-      "password": this.state.password
-    }, (error, user_data) => {
+    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
 
-      this.setState({
-        loaded: true
-      });
+      if error throw error;
 
-      if(error){
-        alert('Login Failed. Please try again');
-      }else{
-        AsyncStorage.setItem('user_data', JSON.stringify(user_data));
-        this.props.navigator.push({
-          component: Account
-        });
-      }
-    });
+      // ...
+    }).then((userData) => {
+
+      console.log("it works");
+
+
+
+    })
+
+
+
+
+    // // Log in and display an alert to tell the user what happened.
+    // firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
+    // ).then((userData) =>
+    //   {
+
+    //     this.setState({
+    //       loaded: false
+    //     });
+
+    //     AsyncStorage.setItem('userData', JSON.stringify(userData));
+
+    //     this.props.navigator.push({
+    //       component: Main
+    //     });
+    //   }
+    // ).catch((error) =>
+    //     {
+    //       this.setState({
+    //         loaded: false
+    //       });
+
+    //       alert('Login Failed. Please try again ' +error);
+    // });
+
+
+
+    
   }
 
   goToSignup(){
@@ -95,7 +123,6 @@ export default class login extends Component {
       component: Main
     });
   }
-
 }
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => login);
