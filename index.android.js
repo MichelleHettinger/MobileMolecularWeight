@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import { AppRegistry, Navigator, Text, View, StyleSheet } from 'react-native';
+import { AppRegistry, Navigator, Text, View } from 'react-native';
 import Button from 'react-native-button';
 
 
-
-import Splash from './Components/Splash.js';
-import Main from './Components/Main/Main.js';
-
+//Navigatible Components
+import Main from './Components/Main.js';
 import Login from './Components/Auth/Login.js';
-import Signup from './Components/Auth/Signup.js';
-
 
 
 class ChemistryApp extends Component {
@@ -19,7 +15,7 @@ class ChemistryApp extends Component {
 		return (
 			<Navigator
 
-				initialRoute={{id: 'SplashPage', name: 'Index'}}
+				initialRoute={{id: 'MainPage', name: 'Index'}}
 				renderScene = {this.renderScene.bind(this)}
 
 				configureScene={(route) => {
@@ -36,14 +32,10 @@ class ChemistryApp extends Component {
 	}
 
 
-	renderScene(route, navigator){
+	renderScene(route, navigator){0
+
 		var routeId = route.id;
 
-		if (routeId === 'SplashPage'){
-			return (
-				<Splash navigator={navigator} />
-			)
-		};
 		if (routeId === 'MainPage'){
 			return (
 				<Main navigator={navigator} />
@@ -55,37 +47,21 @@ class ChemistryApp extends Component {
 			)
 		};
 
-		if (routeId === 'SignupPage'){
-			return (
-				<Login navigator={navigator} />
-			)
-		};
-
 		//return this.noRoute(navigator);
-
 	}
 
 
-	noRoute(navigator){
-		return (
-			<View>
-				<Button onPress={()=>navigator.pop()}>
-					<Text>Go back</Text>
-				</Button>
-			</View>
+	// noRoute(navigator){
+	// 	return (
+	// 		<View>
+	// 			<Button onPress={()=>navigator.pop()}>
+	// 				<Text>Go back</Text>
+	// 			</Button>
+	// 		</View>
 
-		)
-	}
+	// 	)
+	// }
 
 }
-
-const styles = StyleSheet.create({
-    thing: {
-      
-
-    },
-
-
-});
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => ChemistryApp);

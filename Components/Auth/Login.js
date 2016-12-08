@@ -3,18 +3,6 @@ import  {AppRegistry, StyleSheet, Text, TextInput, View, AsyncStorage, Navigator
 import Button from 'react-native-button';
 
 
-//Set up and initialize Firebase
-import * as firebase from 'firebase';
-var config = {
-  apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
-  authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
-  databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
-  storageBucket: "mobile-molecular-weight-85984.appspot.com",
-  messagingSenderId: "837319764944"
-};
-
-firebase.initializeApp(config);
-
 export default class login extends Component {
 
   constructor(props){
@@ -111,9 +99,3 @@ const styles = StyleSheet.create({
 
 
 });
-
-
-
-
-
-AppRegistry.registerComponent('MobileMolecularWeight', () => login);
