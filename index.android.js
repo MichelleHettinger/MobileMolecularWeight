@@ -35,10 +35,9 @@ class ChemistryApp extends Component {
 			email: '',
 			password: '',
 			
-			modalVisible: false,
+			loginModalVisible: false,
+			accountModalVisible: false,
 		};
-
-
 
 		this.getKeypress = this.getKeypress.bind(this);
 		this.getElement = this.getElement.bind(this);
@@ -113,9 +112,14 @@ class ChemistryApp extends Component {
 		console.log(this.state);
 	}
 
-	setModalVisible(visible){
-		this.setState({modalVisible: visible});
+	setLoginModalVisible(visible){
+		this.setState({loginModalVisible: visible});
 	}
+	setAccountModalVisible(visible){
+		this.setState({accountModalVisible: visible})
+	}
+
+
 	login(){
 
 		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
@@ -147,87 +151,157 @@ class ChemistryApp extends Component {
 
 		var user = firebase.auth().currentUser;
 
-		// if (user && user != ''){
-		// 	return (
-		// 		<View><Text>Hello {this.state.email}</Text></View>
-		// 	)
-		// }
+		if (user){
 
-		return (
-			<View style={[styles.main]}>
+			console.log(user);
 
-				<View>
-					<Modal
-						animationType={"none"} 
-						transparent={false}
-						visible={this.state.modalVisible}
-						onRequestClose={ () => {alert("Modal closed")} }
-					>
-						<View style={[styles.modalContent]}>
+			return (
+				<View style={[styles.main]}>
+					<View>
+						<Modal
+							animationType={"none"} 
+							transparent={false}
+							visible={this.state.accountModalVisible}
+							onRequestClose={ () => {alert("Modal closed")} }
+						>
+							<View style={[styles.modalContent]}>
 
-							<View style={[styles.modalHeading]}>
-								<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-								<Text style={[styles.modalText]}>Login to save your molecules! Don't have an account? One will be created for you.</Text>
-							</View>
-
-							<View style={[styles.modalAuth, styles.modalEmail]}>
-								<Text>Email: </Text>
-								<TextInput style={[styles.textInput]}
-									onChangeText={ (text) => this.setState({email: text}) }
-									value={this.state.email}
-									placeholder={"Email Address"}
-								/>
-							</View>
-
-							<View style={[styles.modalAuth, styles.modalPass]}>
-								<Text>Password: </Text>
-								<TextInput style={[styles.textInput]}
-									onChangeText={ (text) => this.setState({password: text}) }
-									value={this.state.password}
-									secureTextEntry={true}
-									placeholder={"Password"}
-								/>
-							</View>
-
-							<View style={[styles.modalButtons]}>
-
-								<View style={[styles.loginView]}>
-									<Button>
-										<Text>Log In</Text>
-									</Button>
+								<View style={[styles.modalHeading]}>
+									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
+									<Text style={[styles.modalText]}> Welcome {this.state.email}</Text>
 								</View>
 
-								<View style={[styles.cancelView]}>
-									<Button onPress={ ()=>{ this.setModalVisible(!this.state.modalVisible)} }>
-										<Text>Cancel</Text>
-									</Button>
+								<View style={[styles.modalAuth, styles.modalEmail]}>
+									<Text>Email: </Text>
+									<TextInput style={[styles.textInput]}
+										onChangeText={ (text) => this.setState({email: text}) }
+										value={this.state.email}
+										placeholder={"Email Address"}
+									/>
 								</View>
 
+								<View style={[styles.modalAuth, styles.modalPass]}>
+									<Text>Password: </Text>
+									<TextInput style={[styles.textInput]}
+										onChangeText={ (text) => this.setState({password: text}) }
+										value={this.state.password}
+										secureTextEntry={true}
+										placeholder={"Password"}
+									/>
+								</View>
+
+								<View style={[styles.modalButtons]}>
+
+									<View style={[styles.loginView]}>
+										<Button>
+											<Text>Login</Text>
+										</Button>
+									</View>
+
+									<View style={[styles.cancelView]}>
+										<Button onPress={ ()=>{ this.setAccountModalVisible(!this.state.accountModalVisible)} }>
+											<Text>Cancel</Text>
+										</Button>
+									</View>
+
+								</View>
 							</View>
-						</View>
-					</Modal>
-				</View>
-
-				<View style={[styles.header]}>
-
-					<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
-
-					<View style={[styles.headerButton]}>
-						<Button onPress={ () => {this.setModalVisible(true)} }>
-							<Text style={[styles.headerButtonText]}>Login/Sign Up</Text>
-						</Button>
+						</Modal>
 					</View>
+
+					<View style={[styles.header]}>
+
+						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
+
+						<View style={[styles.headerButton]}>
+							<Button onPress={ () => {this.setAccountModalVisible(true)} }>
+								<Text style={[styles.headerButtonText]}>My Account</Text>
+							</Button>
+						</View>
+					</View>
+
+				    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
+
+				    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} total={this.state.total} newEdit={this.getEdit} />
+
+				    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
 				</View>
+			)
+		}
+		else {
+			return (
+				<View style={[styles.main]}>
+					<View>
+						<Modal
+							animationType={"none"} 
+							transparent={false}
+							visible={this.state.loginModalVisible}
+							onRequestClose={ () => {alert("Modal closed")} }
+						>
+							<View style={[styles.modalContent]}>
 
-			    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
+								<View style={[styles.modalHeading]}>
+									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
+									<Text style={[styles.modalText]}>Login to save your molecules! Don't have an account? One will be created for you.</Text>
+								</View>
 
-			    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} total={this.state.total} newEdit={this.getEdit} />
+								<View style={[styles.modalAuth, styles.modalEmail]}>
+									<Text>Email: </Text>
+									<TextInput style={[styles.textInput]}
+										onChangeText={ (text) => this.setState({email: text}) }
+										value={this.state.email}
+										placeholder={"Email Address"}
+									/>
+								</View>
 
-			    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
+								<View style={[styles.modalAuth, styles.modalPass]}>
+									<Text>Password: </Text>
+									<TextInput style={[styles.textInput]}
+										onChangeText={ (text) => this.setState({password: text}) }
+										value={this.state.password}
+										secureTextEntry={true}
+										placeholder={"Password"}
+									/>
+								</View>
 
-			</View>
-		)
-		
+								<View style={[styles.modalButtons]}>
+
+									<View style={[styles.loginView]}>
+										<Button>
+											<Text>Log In</Text>
+										</Button>
+									</View>
+
+									<View style={[styles.cancelView]}>
+										<Button onPress={ ()=>{ this.setLoginModalVisible(!this.state.loginModalVisible)} }>
+											<Text>Cancel</Text>
+										</Button>
+									</View>
+
+								</View>
+							</View>
+						</Modal>
+					</View>
+
+					<View style={[styles.header]}>
+
+						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
+
+						<View style={[styles.headerButton]}>
+							<Button onPress={ () => {this.setLoginModalVisible(true)} }>
+								<Text style={[styles.headerButtonText]}>Login/Sign Up</Text>
+							</Button>
+						</View>
+					</View>
+
+				    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
+
+				    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} total={this.state.total} newEdit={this.getEdit} />
+
+				    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
+				</View>
+			)
+		}
 	}
 }
 
@@ -328,9 +402,6 @@ const styles = StyleSheet.create({
     cancelView: {
     	marginLeft: width*0.03,
     }
-
-
-
 });
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => ChemistryApp);
