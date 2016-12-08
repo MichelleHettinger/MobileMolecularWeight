@@ -439,7 +439,7 @@ var elements =
 			atomicNumber: 73
 		},
 		{
-			mass: "183.84",
+			mass: 183.84,
 			elementName: "Tungsten",
 			elementAcronym: "W",
 			atomicNumber: 74

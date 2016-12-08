@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
 	},
 	elementName: {
 		textAlign: "center",
-		fontSize: height*0.02,
+		fontSize: height*0.019,
 	},
 	elementMass: {
 		textAlign: "center",
