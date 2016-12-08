@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import {AppRegistry, StyleSheet, View, Text, Navigator} from 'react-native';
+import {AppRegistry, StyleSheet, View, Text, Navigator, Dimensions} from 'react-native';
 import Button from 'react-native-button';
 
 import ElementsArray from './ElementsArray.js';
+
+
+var width = Dimensions.get('window').width;
+var height = Dimensions.get('window').height;
+
 
 export default class ElementSelector extends Component {
 	constructor(props) {
@@ -104,18 +109,12 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		flexDirection: 'row',
 
+		height: height*0.38,
+		width: width*0.96,
 
-
-		height: 280*0.87,
-		width: 370*0.87,
-
-		marginBottom:10,
-		marginLeft: 0,
-
-			borderRadius: 4,
-			borderWidth: 1,
-			borderColor: 'black',
-
+		borderRadius: 4,
+		borderWidth: 1,
+		borderColor: 'black',
 	},
 
 	elementFont: {
@@ -125,13 +124,10 @@ const styles = StyleSheet.create({
 	},
 
 	elementDiv:{
-		width: 80*0.87,
-		height: 80*0.87,
-		marginTop: 2,
-		marginLeft: 8,
-		marginRight:0,
-		marginTop:2,
-		marginBottom: 0,
+		width: width*0.21,
+		height: width*0.21,
+		marginTop: height*0.005,
+		marginLeft: width*0.023,
 
 		borderRadius: 4,
 		borderWidth: 1,
@@ -143,20 +139,20 @@ const styles = StyleSheet.create({
 
 
 	elementNumber: {
-		fontSize: 10*0.87,
-		marginLeft: 2,
+		fontSize: height*0.011,
+		marginLeft: width*0.011,
 	},
 	elementAcronym: {
 		textAlign: "center",
-		fontSize: 18*0.87,
+		fontSize: height*0.03,
 	},
 	elementName: {
 		textAlign: "center",
-		fontSize: 15*0.87,
+		fontSize: height*0.02,
 	},
 	elementMass: {
 		textAlign: "center",
-		fontSize: 12*0.87,
+		fontSize: height*0.018,
 	}
 
 });

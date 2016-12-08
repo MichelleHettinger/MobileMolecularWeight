@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import Button from 'react-native-button';
-import {View, StyleSheet} from 'react-native';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 
 import ElementSelector from './ElementSelector.js';
+
+
+var width = Dimensions.get('window').width;
+var height = Dimensions.get('window').height;
+
+
 
 export default class KeyboardComponent extends Component {
 	constructor(props, context) {
@@ -11,7 +17,7 @@ export default class KeyboardComponent extends Component {
 	_handlePress(input) {
 		this.props.newKeyPress(input)
 	}
-
+ 
 render() {
 
 	var keyRow1 = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
@@ -59,48 +65,70 @@ render() {
 
 	return (
 		<View style={[styles.allRows]} >
-			<View style={[styles.row]}>{mapRow1}</View>
-			<View style={[styles.row, styles.row2]}>{mapRow2}</View>
-			<View style={[styles.row, styles.row3]}>{mapRow3}</View>
+
+			<View style={[styles.inputView]}>
+				<Text style={[styles.inputText]}>{this.props.userInput.toUpperCase()}</Text>
+			</View>
+
+			<View>
+				<View style={[styles.row1]}>{mapRow1}</View>
+				<View style={[styles.row2]}>{mapRow2}</View>
+				<View style={[styles.row3]}>{mapRow3}</View>
+			</View>
+
+
 		</View>
 	);
 }
 };
 
 const styles = StyleSheet.create({
+	allRows: {
+		width: width*0.96,
+
+		// borderRadius: 4,
+		// borderWidth: 1,
+		// borderColor: 'black',
+	},
 
 	button:{
-
 		color: "white",
 		backgroundColor: "grey",
 
-		width: 30*0.95,
-		height: 35*0.95,
-		fontSize: 20*0.95,
+		width: width*0.08,
+		height: height*0.045,
+		fontSize: height*0.03,
 
-		paddingTop: 2.5,
-		paddingBottom: 5,
-		marginLeft: 5,
-		marginBottom: 5,
+		marginLeft: width*0.006,
+		marginRight: width*0.006,
 	},
 
-
-	allRows: {
-		position: 'relative',
-		bottom: 0,
-		left: 0,
-
+	inputText:{
+		textAlign: 'center',
+	},
+	inputView:{
+		height: height*0.03,
 	},
 
-	row: {
+	row1: {
 		flexDirection: 'row',
+		marginTop: height*0.006,
+		marginBottom: height*0.003,
+		marginLeft: width*0.018,
 	},
 
 	row2: {
-		marginLeft: 15*0.95,
+		flexDirection: 'row',
+		marginTop: height*0.006,
+		marginBottom: height*0.006,
+		marginLeft: width*0.065,
 	},
 
 	row3: {
-		marginLeft: 35*0.95,
+		flexDirection: 'row',
+		marginTop: height*0.003,
+		marginBottom: height*0.006,
+		marginLeft: width*0.12,
+
 	}
 });

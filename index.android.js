@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, Navigator, Text, View } from 'react-native';
+import { AppRegistry, Navigator, Text, View, StyleSheet } from 'react-native';
 import Button from 'react-native-button';
 
 
@@ -79,5 +79,13 @@ class ChemistryApp extends Component {
 
 }
 
+const styles = StyleSheet.create({
+    thing: {
+      
+
+    },
+
+
+});
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => ChemistryApp);

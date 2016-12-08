@@ -61,7 +61,7 @@ export default class login extends Component {
 
   login(){
     this.setState({
-      loading: true
+      loaded: true
     });
 
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
@@ -69,45 +69,23 @@ export default class login extends Component {
       var errorCode = error.code;
       var errorMessage = error.message;
 
-      if error throw error;
+      alert("Error " + errorCode + ". " + errorMessage)
 
       // ...
     }).then((userData) => {
 
-      console.log("it works");
+      console.log(userData);
+
+      var uID = userData.uid;
+      var email = userData.email;
+      var displayName = userData.displayName;
 
 
+      this.props.navigator.push({
+        component: Main
+      });
 
     })
-
-
-
-
-    // // Log in and display an alert to tell the user what happened.
-    // firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password
-    // ).then((userData) =>
-    //   {
-
-    //     this.setState({
-    //       loaded: false
-    //     });
-
-    //     AsyncStorage.setItem('userData', JSON.stringify(userData));
-
-    //     this.props.navigator.push({
-    //       component: Main
-    //     });
-    //   }
-    // ).catch((error) =>
-    //     {
-    //       this.setState({
-    //         loaded: false
-    //       });
-
-    //       alert('Login Failed. Please try again ' +error);
-    // });
-
-
 
     
   }
@@ -124,5 +102,18 @@ export default class login extends Component {
     });
   }
 }
+
+const styles = StyleSheet.create({
+    thing: {
+      
+
+    },
+
+
+});
+
+
+
+
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => login);

@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import Button from 'react-native-button';
+
+
+var width = Dimensions.get('window').width;
+var height = Dimensions.get('window').height;
+
+
 
 export default class ElementCalculator extends Component {
 	constructor(props) {
@@ -17,8 +23,15 @@ export default class ElementCalculator extends Component {
 				<View key={i} style={[styles.elementDiv]}>
 					<Button key={i} onPress={() => this._handlePress('+', element, i)} style={[styles.plus]}> + </Button>
 
-					<Text style={[styles.acronym]}>{element.elementAcronym}</Text>
-					<Text style={[styles.subscript]}>{this.props.elementMultipliers[i]}</Text>
+					<Text style={[styles.acronym]}>
+
+						{element.elementAcronym}
+
+						<Text style={[styles.subscript]}>
+							{this.props.elementMultipliers[i]}
+						</Text>
+
+					</Text>
 
 					<Button onPress={() => this._handlePress("-", element, i)} style={[styles.minus]}> - </Button>
 				</View>
@@ -27,11 +40,16 @@ export default class ElementCalculator extends Component {
 
 		return (
 			<View style={[styles.calculationPanel]}>
-				<Text style={[styles.MWT]}>
-					Molecular Weight: {this.props.total.toFixed(3)} g/mol
-				</Text>
 
-				{elementsToDisplay}
+				<View style={[styles.MWTView]}>
+					<Text style={[styles.MWTText]}>
+						Molecular Weight: {this.props.total.toFixed(3)} g/mol
+					</Text>
+				</View>
+
+				<View style={[styles.elementRows]}>
+					{elementsToDisplay}
+				</View>
 
 			</View>
 
@@ -40,76 +58,66 @@ export default class ElementCalculator extends Component {
 }
 
 const styles = StyleSheet.create({
+	calculationPanel: {
+		height: height*0.28,
+		width: width*0.96,
 
-	MWT: {
-		marginBottom: 1,
-		height: 20,
-		width: 220*1.5,
+		borderRadius: 4,
+		borderWidth: 1,
+		borderColor: 'black',
+	},
+
+	MWTView: {
+		height: height*0.031,
+		width: width*0.96,
+	},
+
+	MWTText: {
 		textAlign: "center",
+		color: 'black',
+	},
 
+	elementRows: {
+		flexWrap: 'wrap',
+		flexDirection: 'row',
 
+		marginLeft: width*0.033, 
 	},
 
 	elementDiv: {
-		width: 30*1.5,
-		height: 50*1.5 ,
+		width: width*0.11,
+		height: height*0.11,
 
-		marginTop: 2,
-		marginLeft: 1.5,
+		marginTop: height*0.01,
+		marginBottom: 0,
 
-			borderRadius: 4,
-			borderWidth: 1,
-			borderColor: 'black',
+		// borderRadius: 4,
+		// borderWidth: 1,
+		// borderColor: 'black',
 
 	},
 
 	plus: {
-		margin: 0,
-		fontSize: 10*1.5,
+		fontSize: height*0.022,
 	},
 
 	minus: {
-		position: "relative",
-		top: -10,
 		color: 'red',
-		fontSize: 15,
-
+		fontSize: height*0.022,
 	},
 
 	acronym: {
-		marginLeft: 8,
-		fontSize: 13 *1.5,
-		margin: 0,
-	},
+		color: 'black',
+		textAlign: 'center',
+		fontSize: height*0.03,
+ 	},
 
 	subscript: {
+		color: 'black',
+		fontWeight: 'bold',
 
-		position: 'relative',
-		left: 30,
-		top: -10,
-
-		fontSize: 10,
-
-		height: 12,
-		width: 12,
-
+		fontSize: height*0.015,
 	},
 
-	calculationPanel: {
-		flexWrap: 'wrap',
-		flexDirection: 'row',
 
-		height: 120*1.5,
-		width: 220*1.5,
-
-		marginBottom: 10,
-		marginLeft: 0,
-
-		position: 'relative',
-		top: 0,
-
-			borderRadius: 4,
-			borderWidth: 1,
-			borderColor: 'black',
-	},
 });

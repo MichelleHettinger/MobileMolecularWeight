@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View, Navigator } from 'react-native';
+import { Text, View, Navigator, StyleSheet, Dimensions} from 'react-native';
 
+import Header from './Header.js';
 import ElementSelector from './ElementSelector.js';
 import Keyboard from './Keyboard.js';
 import CalculatorPanel from './CalcPanel.js';
 
+var width = Dimensions.get('window').width;
+var height = Dimensions.get('window').height;
 
 export default class UserInputToElement extends Component {
 	constructor(props) {
@@ -82,10 +85,6 @@ export default class UserInputToElement extends Component {
 
 		console.log(this.state);
 	}
-
-
-
-
 	
 	render(){
 		return (
@@ -95,18 +94,26 @@ export default class UserInputToElement extends Component {
 	renderScene() {
 		return (
 
-		  <View style={{padding: 10}}>
-		   
+		  <View style={[styles.main]}>
+
+			<Header/>
+
 		    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
 
 		    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} total={this.state.total} newEdit={this.getEdit} />
 
-		    <Keyboard newKeyPress={this.getKeypress}/>
+		    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
 
 		  </View>
 		);
 	}
 }
 
+const styles = StyleSheet.create({
+    main: {
+    	marginTop: height*0.01,
+    	marginLeft: width*0.02,
+    },
 
-// AppRegistry.registerComponent('MobileMolecularWeight', () => UserInputToElement);
+
+});
