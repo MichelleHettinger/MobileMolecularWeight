@@ -34,6 +34,7 @@ class ChemistryApp extends Component {
 
 			email: '',
 			password: '',
+			newPass: '',
 			logged: false,
 			
 			loginModalVisible: false,
@@ -201,18 +202,72 @@ class ChemistryApp extends Component {
 						>
 							<View>
 
-								<View style={[]}>
+								<View style={[styles.accountModalHeading]}>
 									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-									<Text style={[]}>Welcome {this.state.email}</Text>
+									<Text style={[styles.accountModalText]}>Welcome {this.state.email
+																//user.email
+									}</Text>
 								</View>
 
 
-								<View style={[]}>
+								<View style={[styles.accountModalContent]}>
 
-									<View style={[]}>
-										<Button onPress={ ()=>{ this.setAccountModalVisible(!this.state.accountModalVisible)} }>
-											<Text>Close</Text>
-										</Button>
+									<View style={styles.accountAuthFields}>
+										<View style={[styles.modalAuth, styles.accountEmail]}>
+											<Text style={{color:'black'}}>Email: </Text>
+											<TextInput style={[styles.loginTextInput]}
+												underlineColorAndroid={'white'}
+												editable = {false}
+												//placeholder={user.email}
+												placeholder={this.state.email}
+											/>
+										</View>
+
+										<View style={[styles.modalAuth, styles.newEmail]}>
+											<Text style={{color:'black'}}>New Email: </Text>
+											<TextInput style={[styles.loginTextInput]}
+												onChangeText={ (text) => this.setState({email: text}) }
+												autoFocus={true}
+												value={this.state.email}
+												placeholder={"Email Address"}
+											/>
+										</View>
+
+										<View style={[styles.modalAuth, styles.newPass]}>
+											<Text style={{color:'black'}}>New Pass: </Text>
+											<TextInput style={[styles.loginTextInput]}
+												onChangeText={ (text) => this.setState({password: text}) }
+												value={this.state.password}
+												secureTextEntry={true}
+												placeholder={"New Password"}
+											/>
+										</View>
+
+
+										<View style={[styles.modalAuth, styles.oldPass]}>
+											<Text style={{color:'black'}}>Password: </Text>
+											<TextInput style={[styles.loginTextInput]}
+												onChangeText={ (text) => this.setState({newPass: text}) }
+												value={this.state.newPass}
+												secureTextEntry={true}
+												placeholder={"Old Password"}
+											/>
+										</View>
+									</View>
+
+
+									<View style={styles.accountModalButtons}>
+										<View style={[styles.cancelAccountView]}>
+											<Button onPress={ ()=>{ this.setAccountModalVisible(!this.state.accountModalVisible)} }>
+												<Text style={{color: 'black'}}>Close</Text>
+											</Button>
+										</View>
+
+										<View style={[styles.submitAccountView]}>
+											<Button>
+												<Text style={{color: 'black'}}>Submit</Text>
+											</Button>
+										</View>			
 									</View>
 
 								</View>
@@ -265,10 +320,10 @@ class ChemistryApp extends Component {
 
 								<View style={[styles.loginModalHeading]}>
 									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-									<Text style={[styles.modalText]}>Log in or create an account to save your molecules.</Text>
+									<Text style={[styles.loginModalText]}>Log in or create an account to save your molecules.</Text>
 								</View>
 
-								<View style={styles.authFields}>
+								<View style={styles.loginAuthFields}>
 									<View style={[styles.modalAuth, styles.modalEmail]}>
 										<Text style={{color:'black'}}>Email: </Text>
 										<TextInput style={[styles.loginTextInput]}
@@ -339,6 +394,63 @@ class ChemistryApp extends Component {
 }
 
 const styles = StyleSheet.create({
+
+	//	Account Modal //
+    accountModalContent: {
+    	marginTop: height*0.01,
+    	marginLeft: 0,
+    },
+	accountModalHeading: {
+    	marginBottom: height*0.05,
+
+		borderRadius: 4,
+		borderWidth: 1,
+		borderColor: 'black',
+	},
+    accountModalText: {
+    	color: 'black',
+    	marginLeft: width*0.06,
+    },
+    accountAuthFields: {
+		marginLeft: width*0.15,
+		marginBottom: height*0.01,
+    },
+	accountEmail: {
+		marginLeft: width*0.189,
+	},
+	newEmail: {
+		marginLeft: width*0.1,
+	},
+	newPass: {
+		marginLeft: width*0.115,
+	},
+	oldPass: {
+		marginLeft: width*0.118,
+	},
+	accountModalButtons: {
+		flexWrap: 'wrap',
+		flexDirection: 'row',
+
+		height: height*0.04,
+		width: width*0.35,
+		marginLeft: width*0.32,
+	},
+	submitAccountView: {
+		width: width*0.13,
+		marginLeft: width*0.045,
+	},
+	cancelAccountView: {
+		width: width*0.11,
+		marginRight: width*0.045,
+	},
+
+
+
+
+
+
+
+
     main: {
     	marginTop: height*0.01,
     	marginLeft: width*0.02,
@@ -370,7 +482,7 @@ const styles = StyleSheet.create({
     	fontSize: height*0.045,
     	color: 'black',
     },
-    modalText: {
+    loginModalText: {
     	color: 'black',
     	marginLeft: width*0.06,
     },
@@ -402,7 +514,7 @@ const styles = StyleSheet.create({
     },
 
     //View tag for each auth input element
-    authFields: {
+    loginAuthFields: {
 		marginLeft: width*0.15,
 		marginBottom: height*0.01,
     },
@@ -465,43 +577,20 @@ const styles = StyleSheet.create({
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    //View tag for logged in header buttons
     accountButtons: {
     	flexWrap: 'wrap',
     	flexDirection: 'row',
 
     	height: height*0.05,
-
     },
-
 	myAccountButtonView: {
-
 		width: width*0.23,
 		marginLeft: width*0.375,
-
-
-
-
 	},
 	logoutButtonView: {
-
 		width: width*0.15,
 		marginLeft: width*0.165,
-
-
-
-
 	},
 
 
