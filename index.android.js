@@ -34,6 +34,7 @@ class ChemistryApp extends Component {
 
 			email: '',
 			password: '',
+			logged: false,
 			
 			loginModalVisible: false,
 			accountModalVisible: false,
@@ -42,6 +43,8 @@ class ChemistryApp extends Component {
 		this.getKeypress = this.getKeypress.bind(this);
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
+
+		this.logout = this.logout.bind(this);
 	}
 
 	getKeypress(newText){
@@ -132,40 +135,67 @@ class ChemistryApp extends Component {
 			// ...
 		}).then((userData) => {
 
-			if (userData){
-				console.log(userData);
-			}
-			else {
-				firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
-				  // Handle Errors here.
-				  var errorCode = error.code;
-				  var errorMessage = error.message;
-				  // ...
-				}).then((newUserData) => {
-
-					console.log(newUserData);
-
-				});
-			}
-
+			console.log(userData);
+			this.setLoginModalVisible(!this.state.loginModalVisible);
 			// var uID = userData.uid;
 			// var email = userData.email;
 			// var displayName = userData.displayName;
 
+			console.log(this)
 
-			// this.setState({
-			// 	email: email,
-			// });
+			this.setState({
+				logged: true,
+			});
 
 		})
 	}
+
+	logout(){
+		firebase.auth().signOut().then(function() {
+
+			console.log(this)
+
+			// this.setState({
+			// 	logged: false,
+			// });
+
+
+			alert("You have signed out");
+
+
+		}, function(error) {
+		  // An error happened.
+		  alert("Error " + error);
+
+		});
+	}
+
+	signup(){
+		firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+		  // Handle Errors here.
+		  var errorCode = error.code;
+		  var errorMessage = error.message;
+		  // ...
+
+		  alert("Error " + errorCode + ". " + errorMessage)
+
+		}).then((newUserData) => {
+
+			console.log(newUserData);
+			this.setLoginModalVisible(!this.state.loginModalVisible);
+
+		});
+	}
+
+
 
 
 	render() {
 
 		var user = firebase.auth().currentUser;
 
-		if (user){
+		//If user is logged in
+		if (this.state.logged){
 
 			console.log(user);
 
@@ -203,10 +233,15 @@ class ChemistryApp extends Component {
 
 						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
 
-						<View style={[styles.headerButton]}>
+						<View style={[styles.accountButtons]}>
 							<Button onPress={ () => {this.setAccountModalVisible(true)} }>
 								<Text style={[styles.headerButtonText]}>My Account</Text>
 							</Button>
+
+							<Button onPress={this.logout.bind(this)}>
+								<Text style={[styles.headerButtonText]}> Log Out</Text>
+							</Button>
+
 						</View>
 					</View>
 
@@ -218,6 +253,8 @@ class ChemistryApp extends Component {
 				</View>
 			)
 		}
+
+		//Else if no one is logged in
 		else {
 			return (
 				<View style={[styles.main]}>
@@ -238,6 +275,7 @@ class ChemistryApp extends Component {
 								<View style={[styles.modalAuth, styles.modalEmail]}>
 									<Text>Email: </Text>
 									<TextInput style={[styles.textInput]}
+										underlineColorAndroid={'white'}
 										autoFocus={true}
 										onChangeText={ (text) => this.setState({email: text}) }
 										value={this.state.email}
@@ -260,6 +298,12 @@ class ChemistryApp extends Component {
 									<View style={[styles.loginView]}>
 										<Button onPress={this.login.bind(this)}>
 											<Text>Log In</Text>
+										</Button>
+									</View>
+
+									<View style={[]}>
+										<Button onPress={this.signup.bind(this)}>
+											<Text>Sign Up</Text>
 										</Button>
 									</View>
 
@@ -329,9 +373,15 @@ const styles = StyleSheet.create({
 
     textInput: {
     	width: width*0.6,
-    	height: height*0.01,
-
+    	height: height*0.09,
     	marginBottom: 0,
+
+    	top: -1*height*0.03,
+
+		// borderRadius: 4,
+		// borderWidth: 1,
+		// borderColor: 'black',
+
     },
 
     modalContent: {
@@ -366,10 +416,10 @@ const styles = StyleSheet.create({
     	flexWrap: 'wrap',
     	flexDirection: 'row',
 
-		width: width,
-		height: height*0.040,
+		width: width*0.85,
+		height: height*0.05,
 
-		marginLeft: width*0.06,
+		marginLeft: width*0.05,
 		marginBottom: height*0.01,
 
     },
@@ -384,7 +434,7 @@ const styles = StyleSheet.create({
     	flexDirection: 'row',
 
     	width: width*0.3,
-    	marginLeft: width*0.54,
+    	marginLeft: width*0.4,
 
     },
     loginView: {
@@ -392,7 +442,13 @@ const styles = StyleSheet.create({
     },
     cancelView: {
     	marginLeft: width*0.03,
-    }
+    },
+
+    accountButtons: {
+    	flexWrap: 'wrap',
+    	flexDirection: 'row',
+    },
+
 });
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => ChemistryApp);
