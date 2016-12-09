@@ -199,7 +199,7 @@ class ChemistryApp extends Component {
 							visible={this.state.accountModalVisible}
 							onRequestClose={ () => {alert("Modal closed")} }
 						>
-							<View style={[]}>
+							<View>
 
 								<View style={[]}>
 									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
@@ -220,21 +220,21 @@ class ChemistryApp extends Component {
 						</Modal>
 					</View>
 
-					<View style={[]}>
+					<View style={[styles.header]}>
 
-						<Text style={[]}>Mobile Molecular Weight</Text>
+						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
 
 						<View style={[styles.accountButtons]}>
 
-							<View>
+							<View style={styles.myAccountButtonView}>
 								<Button onPress={ () => {this.setAccountModalVisible(true)} }>
-									<Text style={[styles.headerButtonText]}>My Account</Text>
+									<Text style={{color: 'black'}}>My Account</Text>
 								</Button>
 							</View>
 
-							<View>
+							<View style={styles.logoutButtonView}>
 								<Button onPress={ this.logout.bind(this) }>
-									<Text style={[styles.headerButtonText]}>Log Out</Text>
+									<Text>Log Out</Text>
 								</Button>
 							</View>
 
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
     //View tag for login/signup button
     loginHeaderButton: {
     	width: width*0.25,
-    	marginLeft: width*0.32,
+    	marginLeft: width*0.35,
     },
 
     //View tag for everything in the login modal
@@ -480,7 +480,33 @@ const styles = StyleSheet.create({
     accountButtons: {
     	flexWrap: 'wrap',
     	flexDirection: 'row',
+
+    	height: height*0.05,
+
     },
+
+	myAccountButtonView: {
+
+		width: width*0.23,
+		marginLeft: width*0.375,
+
+
+
+
+	},
+	logoutButtonView: {
+
+		width: width*0.15,
+		marginLeft: width*0.165,
+
+
+
+
+	},
+
+
+
+
 });
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => ChemistryApp);
