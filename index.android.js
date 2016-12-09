@@ -124,7 +124,6 @@ class ChemistryApp extends Component {
 
 
 	login(){
-
 		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
 			// Handle Errors here.
 			var errorCode = error.code;
@@ -141,7 +140,6 @@ class ChemistryApp extends Component {
 			// var email = userData.email;
 			// var displayName = userData.displayName;
 
-			console.log(this)
 
 			this.setState({
 				logged: true,
@@ -151,19 +149,15 @@ class ChemistryApp extends Component {
 	}
 
 	logout(){
-
 		firebase.auth().signOut().catch(function(error){
 
 			alert("Error " + error);
 
 		}).then(function() {
 
-			// console.log(this.state)
-
 			this.setState({
 				logged: false,
 			});
-
 
 			alert("You have signed out");
 		}.bind(this))
@@ -187,8 +181,6 @@ class ChemistryApp extends Component {
 	}
 
 
-
-
 	render() {
 
 		var user = firebase.auth().currentUser;
@@ -207,19 +199,19 @@ class ChemistryApp extends Component {
 							visible={this.state.accountModalVisible}
 							onRequestClose={ () => {alert("Modal closed")} }
 						>
-							<View style={[styles.modalContent]}>
+							<View style={[]}>
 
-								<View style={[styles.modalHeading]}>
+								<View style={[]}>
 									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-									<Text style={[styles.modalText]}> Welcome {this.state.email}</Text>
+									<Text style={[]}>Welcome {this.state.email}</Text>
 								</View>
 
 
-								<View style={[styles.modalButtons]}>
+								<View style={[]}>
 
-									<View style={[styles.cancelView]}>
+									<View style={[]}>
 										<Button onPress={ ()=>{ this.setAccountModalVisible(!this.state.accountModalVisible)} }>
-											<Text>Cancel</Text>
+											<Text>Close</Text>
 										</Button>
 									</View>
 
@@ -228,9 +220,9 @@ class ChemistryApp extends Component {
 						</Modal>
 					</View>
 
-					<View style={[styles.header]}>
+					<View style={[]}>
 
-						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
+						<Text style={[]}>Mobile Molecular Weight</Text>
 
 						<View style={[styles.accountButtons]}>
 
@@ -269,16 +261,16 @@ class ChemistryApp extends Component {
 							visible={this.state.loginModalVisible}
 							onRequestClose={ () => {alert("Modal closed")} }
 						>
-							<View style={[styles.modalContent]}>
+							<View style={[styles.loginModalContent]}>
 
-								<View style={[styles.modalHeading]}>
+								<View style={[styles.loginModalHeading]}>
 									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
 									<Text style={[styles.modalText]}>Login to save your molecules! Don't have an account? One will be created for you.</Text>
 								</View>
 
 								<View style={[styles.modalAuth, styles.modalEmail]}>
 									<Text>Email: </Text>
-									<TextInput style={[styles.textInput]}
+									<TextInput style={[styles.loginTextInput]}
 										underlineColorAndroid={'white'}
 										autoFocus={true}
 										onChangeText={ (text) => this.setState({email: text}) }
@@ -289,7 +281,7 @@ class ChemistryApp extends Component {
 
 								<View style={[styles.modalAuth, styles.modalPass]}>
 									<Text>Password: </Text>
-									<TextInput style={[styles.textInput]}
+									<TextInput style={[styles.loginTextInput]}
 										onChangeText={ (text) => this.setState({password: text}) }
 										value={this.state.password}
 										secureTextEntry={true}
@@ -297,7 +289,7 @@ class ChemistryApp extends Component {
 									/>
 								</View>
 
-								<View style={[styles.modalButtons]}>
+								<View style={[styles.loginModalButtons]}>
 
 									<View style={[styles.loginView]}>
 										<Button onPress={this.login.bind(this)}>
@@ -305,15 +297,15 @@ class ChemistryApp extends Component {
 										</Button>
 									</View>
 
-									<View style={[]}>
+									<View style={[styles.signupView]}>
 										<Button onPress={this.signup.bind(this)}>
 											<Text>Sign Up</Text>
 										</Button>
 									</View>
 
-									<View style={[styles.cancelView]}>
+									<View style={[styles.cancelLoginView]}>
 										<Button onPress={ ()=>{ this.setLoginModalVisible(!this.state.loginModalVisible)} }>
-											<Text>Cancel</Text>
+											<Text>Close</Text>
 										</Button>
 									</View>
 
@@ -326,7 +318,7 @@ class ChemistryApp extends Component {
 
 						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
 
-						<View style={[styles.headerButton]}>
+						<View style={[styles.loginHeaderButton]}>
 							<Button onPress={ () => {this.setLoginModalVisible(true)} }>
 								<Text style={[styles.headerButtonText]}>Login/Sign Up</Text>
 							</Button>
@@ -350,8 +342,8 @@ const styles = StyleSheet.create({
     	marginLeft: width*0.02,
     },
 
+    //Both headers
     header: {
-
 		width: width*0.96,
 		height: height*0.08,
 
@@ -365,30 +357,29 @@ const styles = StyleSheet.create({
     	color: 'black',
     	fontSize: width*0.05,
     },
-    headerButton: {
-    	width: width*0.25,
-    	marginLeft: width*0.32,
-
-    },
     headerButtonText: {
     	textAlign: 'center',
     	fontSize: height*0.02
     },
 
-    textInput: {
-    	width: width*0.6,
-    	height: height*0.09,
-    	marginBottom: 0,
-
-    	top: -1*height*0.03,
-
-		// borderRadius: 4,
-		// borderWidth: 1,
-		// borderColor: 'black',
-
+    //Both modals
+    modalTitle: {
+    	textAlign: 'center',
+    	fontSize: height*0.045,
+    	color: 'black',
+    },
+    modalText: {
+    	color: 'black',
     },
 
-    modalContent: {
+    //View tag for login/signup button
+    loginHeaderButton: {
+    	width: width*0.25,
+    	marginLeft: width*0.32,
+    },
+
+    //View tag for everything in the login modal
+    loginModalContent: {
     	marginTop: height*0.01,
     	marginLeft: 0,
 
@@ -396,10 +387,10 @@ const styles = StyleSheet.create({
 		// borderRadius: 4,
 		// borderWidth: 1,
 		// borderColor: 'black',
-
     },
 
-    modalHeading: {
+    //View for the heading with login/signup button
+    loginModalHeading: {
     	marginBottom: height*0.05,
 
 		borderRadius: 4,
@@ -407,15 +398,7 @@ const styles = StyleSheet.create({
 		borderColor: 'black',
     },
 
-    modalTitle: {
-    	textAlign: 'center',
-    	fontSize: height*0.045,
-    },
-
-    modalText: {
-
-    },
-
+    //View tag for each auth input element
     modalAuth: {
     	flexWrap: 'wrap',
     	flexDirection: 'row',
@@ -425,34 +408,67 @@ const styles = StyleSheet.create({
 
 		marginLeft: width*0.05,
 		marginBottom: height*0.01,
-
     },
+
+    //The view tags for input field
     modalEmail: {
     	marginLeft: width*0.16,
     },
     modalPass: {
     	marginLeft: width*0.089,
     },
-    modalButtons:{
+
+    //Text box
+    loginTextInput: {
+    	width: width*0.6,
+    	height: height*0.09,
+    	marginBottom: 0,
+
+    	top: -1*height*0.03,
+
+		// borderRadius: 4,
+		// borderWidth: 1,
+		// borderColor: 'black',
+    },
+
+    //Log in
+    loginModalButtons:{
     	flexWrap: 'wrap',
     	flexDirection: 'row',
 
     	width: width*0.3,
     	marginLeft: width*0.4,
-
     },
+
+    //View tags for the buttons
     loginView: {
     	marginRight: width*0.03,
     },
-    cancelView: {
+    cancelLoginView: {
     	marginLeft: width*0.03,
     },
+    signupView:{
+
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     accountButtons: {
     	flexWrap: 'wrap',
     	flexDirection: 'row',
     },
-
 });
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => ChemistryApp);
