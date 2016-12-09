@@ -44,7 +44,7 @@ class ChemistryApp extends Component {
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
 
-		this.logout = this.logout.bind(this);
+		this.logout = this.logout.bind(this, this.state.logged);
 	}
 
 	getKeypress(newText){
@@ -151,23 +151,22 @@ class ChemistryApp extends Component {
 	}
 
 	logout(){
-		firebase.auth().signOut().then(function() {
 
-			console.log(this)
+		firebase.auth().signOut().catch(function(error){
 
-			// this.setState({
-			// 	logged: false,
-			// });
+			alert("Error " + error);
+
+		}).then(function() {
+
+			// console.log(this.state)
+
+			this.setState({
+				logged: false,
+			});
 
 
 			alert("You have signed out");
-
-
-		}, function(error) {
-		  // An error happened.
-		  alert("Error " + error);
-
-		});
+		}.bind(this))
 	}
 
 	signup(){
@@ -234,13 +233,18 @@ class ChemistryApp extends Component {
 						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
 
 						<View style={[styles.accountButtons]}>
-							<Button onPress={ () => {this.setAccountModalVisible(true)} }>
-								<Text style={[styles.headerButtonText]}>My Account</Text>
-							</Button>
 
-							<Button onPress={this.logout.bind(this)}>
-								<Text style={[styles.headerButtonText]}> Log Out</Text>
-							</Button>
+							<View>
+								<Button onPress={ () => {this.setAccountModalVisible(true)} }>
+									<Text style={[styles.headerButtonText]}>My Account</Text>
+								</Button>
+							</View>
+
+							<View>
+								<Button onPress={ this.logout.bind(this) }>
+									<Text style={[styles.headerButtonText]}>Log Out</Text>
+								</Button>
+							</View>
 
 						</View>
 					</View>
