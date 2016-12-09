@@ -122,19 +122,31 @@ class ChemistryApp extends Component {
 
 	login(){
 
-
-
 		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
 			// Handle Errors here.
 			var errorCode = error.code;
 			var errorMessage = error.message;
-		console.log('works')
+
 			alert("Error " + errorCode + ". " + errorMessage)
 
 			// ...
 		}).then((userData) => {
 
-			console.log(userData);
+			if (userData){
+				console.log(userData);
+			}
+			else {
+				firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+				  // Handle Errors here.
+				  var errorCode = error.code;
+				  var errorMessage = error.message;
+				  // ...
+				}).then((newUserData) => {
+
+					console.log(newUserData);
+
+				});
+			}
 
 			// var uID = userData.uid;
 			// var email = userData.email;
@@ -173,32 +185,8 @@ class ChemistryApp extends Component {
 									<Text style={[styles.modalText]}> Welcome {this.state.email}</Text>
 								</View>
 
-								<View style={[styles.modalAuth, styles.modalEmail]}>
-									<Text>Email: </Text>
-									<TextInput style={[styles.textInput]}
-										onChangeText={ (text) => this.setState({email: text}) }
-										value={this.state.email}
-										placeholder={"Email Address"}
-									/>
-								</View>
-
-								<View style={[styles.modalAuth, styles.modalPass]}>
-									<Text>Password: </Text>
-									<TextInput style={[styles.textInput]}
-										onChangeText={ (text) => this.setState({password: text}) }
-										value={this.state.password}
-										secureTextEntry={true}
-										placeholder={"Password"}
-									/>
-								</View>
 
 								<View style={[styles.modalButtons]}>
-
-									<View style={[styles.loginView]}>
-										<Button>
-											<Text>Login</Text>
-										</Button>
-									</View>
 
 									<View style={[styles.cancelView]}>
 										<Button onPress={ ()=>{ this.setAccountModalVisible(!this.state.accountModalVisible)} }>
@@ -344,9 +332,6 @@ const styles = StyleSheet.create({
     	height: height*0.01,
 
     	marginBottom: 0,
-
-    	fontSize: 100,
-    	zIndex: 1000,
     },
 
     modalContent: {
