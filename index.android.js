@@ -265,47 +265,49 @@ class ChemistryApp extends Component {
 
 								<View style={[styles.loginModalHeading]}>
 									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-									<Text style={[styles.modalText]}>Login to save your molecules! Don't have an account? One will be created for you.</Text>
+									<Text style={[styles.modalText]}>Log in or create an account to save your molecules.</Text>
 								</View>
 
-								<View style={[styles.modalAuth, styles.modalEmail]}>
-									<Text>Email: </Text>
-									<TextInput style={[styles.loginTextInput]}
-										underlineColorAndroid={'white'}
-										autoFocus={true}
-										onChangeText={ (text) => this.setState({email: text}) }
-										value={this.state.email}
-										placeholder={"Email Address"}
-									/>
-								</View>
+								<View style={styles.authFields}>
+									<View style={[styles.modalAuth, styles.modalEmail]}>
+										<Text style={{color:'black'}}>Email: </Text>
+										<TextInput style={[styles.loginTextInput]}
+											underlineColorAndroid={'white'}
+											autoFocus={true}
+											onChangeText={ (text) => this.setState({email: text}) }
+											value={this.state.email}
+											placeholder={"Email Address"}
+										/>
+									</View>
 
-								<View style={[styles.modalAuth, styles.modalPass]}>
-									<Text>Password: </Text>
-									<TextInput style={[styles.loginTextInput]}
-										onChangeText={ (text) => this.setState({password: text}) }
-										value={this.state.password}
-										secureTextEntry={true}
-										placeholder={"Password"}
-									/>
+									<View style={[styles.modalAuth, styles.modalPass]}>
+										<Text style={{color:'black'}}>Password: </Text>
+										<TextInput style={[styles.loginTextInput]}
+											onChangeText={ (text) => this.setState({password: text}) }
+											value={this.state.password}
+											secureTextEntry={true}
+											placeholder={"Password"}
+										/>
+									</View>
 								</View>
 
 								<View style={[styles.loginModalButtons]}>
 
-									<View style={[styles.loginView]}>
-										<Button onPress={this.login.bind(this)}>
-											<Text>Log In</Text>
+									<View style={[styles.signupView]}>
+										<Button onPress={this.signup.bind(this)}>
+											<Text style={{color:'black'}}>Sign Up</Text>
 										</Button>
 									</View>
 
-									<View style={[styles.signupView]}>
-										<Button onPress={this.signup.bind(this)}>
-											<Text>Sign Up</Text>
+									<View style={[styles.loginView]}>
+										<Button onPress={this.login.bind(this)}>
+											<Text style={{color:'black'}}>Log In</Text>
 										</Button>
 									</View>
 
 									<View style={[styles.cancelLoginView]}>
 										<Button onPress={ ()=>{ this.setLoginModalVisible(!this.state.loginModalVisible)} }>
-											<Text>Close</Text>
+											<Text style={{color:'black'}}>Close</Text>
 										</Button>
 									</View>
 
@@ -370,6 +372,7 @@ const styles = StyleSheet.create({
     },
     modalText: {
     	color: 'black',
+    	marginLeft: width*0.06,
     },
 
     //View tag for login/signup button
@@ -399,15 +402,17 @@ const styles = StyleSheet.create({
     },
 
     //View tag for each auth input element
+    authFields: {
+		marginLeft: width*0.15,
+		marginBottom: height*0.01,
+    },
     modalAuth: {
     	flexWrap: 'wrap',
     	flexDirection: 'row',
 
 		width: width*0.85,
-		height: height*0.05,
+		height: height*0.055,
 
-		marginLeft: width*0.05,
-		marginBottom: height*0.01,
     },
 
     //The view tags for input field
@@ -437,18 +442,25 @@ const styles = StyleSheet.create({
     	flexDirection: 'row',
 
     	width: width*0.3,
-    	marginLeft: width*0.4,
+    	height: height*0.05,
+    	marginLeft: width*0.33,
+
+
+		// borderRadius: 4,
+		// borderWidth: 1,
+		// borderColor: 'black',
+
     },
 
     //View tags for the buttons
     loginView: {
-    	marginRight: width*0.03,
+
     },
     cancelLoginView: {
-    	marginLeft: width*0.03,
+    	marginLeft: width*0.08,
     },
     signupView:{
-
+    	marginRight: width*0.03,
     },
 
 
