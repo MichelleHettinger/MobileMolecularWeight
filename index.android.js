@@ -122,11 +122,13 @@ class ChemistryApp extends Component {
 
 	login(){
 
+
+
 		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
 			// Handle Errors here.
 			var errorCode = error.code;
 			var errorMessage = error.message;
-
+		console.log('works')
 			alert("Error " + errorCode + ". " + errorMessage)
 
 			// ...
@@ -134,14 +136,14 @@ class ChemistryApp extends Component {
 
 			console.log(userData);
 
-			var uID = userData.uid;
-			var email = userData.email;
-			var displayName = userData.displayName;
+			// var uID = userData.uid;
+			// var email = userData.email;
+			// var displayName = userData.displayName;
 
 
-			this.setState({
-				email: email,
-			});
+			// this.setState({
+			// 	email: email,
+			// });
 
 		})
 	}
@@ -248,6 +250,7 @@ class ChemistryApp extends Component {
 								<View style={[styles.modalAuth, styles.modalEmail]}>
 									<Text>Email: </Text>
 									<TextInput style={[styles.textInput]}
+										autoFocus={true}
 										onChangeText={ (text) => this.setState({email: text}) }
 										value={this.state.email}
 										placeholder={"Email Address"}
@@ -267,7 +270,7 @@ class ChemistryApp extends Component {
 								<View style={[styles.modalButtons]}>
 
 									<View style={[styles.loginView]}>
-										<Button>
+										<Button onPress={this.login.bind(this)}>
 											<Text>Log In</Text>
 										</Button>
 									</View>
@@ -341,6 +344,9 @@ const styles = StyleSheet.create({
     	height: height*0.01,
 
     	marginBottom: 0,
+
+    	fontSize: 100,
+    	zIndex: 1000,
     },
 
     modalContent: {
