@@ -21,7 +21,9 @@ var config = {
   messagingSenderId: "837319764944"
 };
 
+//Only one instance of firebase can run at a time
 firebase.initializeApp(config);
+
 
 class ChemistryApp extends Component {
 	constructor(props) {
@@ -34,7 +36,10 @@ class ChemistryApp extends Component {
 
 			email: '',
 			password: '',
-			newPass: '',
+
+			newEmail: '',
+			newUsername: '',
+
 			logged: false,
 			
 			loginModalVisible: false,
@@ -44,8 +49,6 @@ class ChemistryApp extends Component {
 		this.getKeypress = this.getKeypress.bind(this);
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
-
-		this.logout = this.logout.bind(this, this.state.logged);
 	}
 
 	getKeypress(newText){
@@ -132,20 +135,20 @@ class ChemistryApp extends Component {
 
 			alert("Error " + errorCode + ". " + errorMessage)
 
-			// ...
 		}).then((userData) => {
 
 			console.log(userData);
-			this.setLoginModalVisible(!this.state.loginModalVisible);
-			// var uID = userData.uid;
-			// var email = userData.email;
-			// var displayName = userData.displayName;
 
+			if (userData){
+				this.setLoginModalVisible(!this.state.loginModalVisible);
 
-			this.setState({
-				logged: true,
-			});
-
+				this.setState({
+					logged: true,
+				});
+			}
+			else {
+				console.log("Failed to login")
+			}
 		})
 	}
 
@@ -161,6 +164,7 @@ class ChemistryApp extends Component {
 			});
 
 			alert("You have signed out");
+
 		}.bind(this))
 	}
 
@@ -182,15 +186,46 @@ class ChemistryApp extends Component {
 	}
 
 
-	render() {
+	updateProfile(){
 
+		//Listener for firebase user login
 		var user = firebase.auth().currentUser;
 
-		//If user is logged in
-		if (this.state.logged){
 
+		user.updateEmail(this.state.newEmail).catch(function(error){
+			//Error hapened
+			alert("Update error. " + error);
+
+		}).then((result)=>{
+			// Update successful.
+			console.log("Email Updated")
 			console.log(user);
+		})
+	
+	}
 
+	resetPassword(){
+
+		auth.sendPasswordResetEmail(this.state.email).catch(function(error){
+			//Error hapened
+			alert("Update error. " + error);
+
+		}).then((result)=>{
+			// Update successful.
+			console.log("Email sent!")
+			console.log(result);
+
+		})
+	}
+
+	render() {
+		//Listener for firebase user login
+		var user = firebase.auth().currentUser;
+
+		if (!user){ console.log("Welcome to Mobile Molecular Weight") }
+
+		//If user is logged in
+		if (user){
 			return (
 				<View style={[styles.main]}>
 					<View>
@@ -204,57 +239,63 @@ class ChemistryApp extends Component {
 
 								<View style={[styles.accountModalHeading]}>
 									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-									<Text style={[styles.accountModalText]}>Welcome {this.state.email
-																//user.email
-									}</Text>
+									<Text style={[styles.accountModalText, {marginLeft: width*0.09}]}>Thank you for using Mobile Molecular Weight!</Text>
 								</View>
 
 
 								<View style={[styles.accountModalContent]}>
 
-									<View style={styles.accountAuthFields}>
-										<View style={[styles.modalAuth, styles.accountEmail]}>
-											<Text style={{color:'black'}}>Email: </Text>
-											<TextInput style={[styles.loginTextInput]}
-												underlineColorAndroid={'white'}
-												editable = {false}
-												//placeholder={user.email}
-												placeholder={this.state.email}
-											/>
+
+									<View >
+										<View style={styles.accountAuthFields}>
+											<View style={[styles.modalAuth, styles.accountUsername]}>
+												<Text style={{color:'black'}}>Username: </Text>
+												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.01}]}
+													onChangeText={ (text) => this.setState({newUsername: text}) }
+													editable={false}
+													underlineColorAndroid={'white'}
+													placeholder={user.displayName}
+												/>
+											</View>
+
+											<View style={[styles.modalAuth, styles.accountEmail]}>
+												<Text style={{color:'black'}}>Email: </Text>
+												<TextInput style={[styles.accountTextInput,  {marginLeft: width*0.1}]}
+													underlineColorAndroid={'white'}
+													editable = {false}
+													placeholder={user.email}
+												/>
+											</View>
 										</View>
 
-										<View style={[styles.modalAuth, styles.newEmail]}>
-											<Text style={{color:'black'}}>New Email: </Text>
-											<TextInput style={[styles.loginTextInput]}
-												onChangeText={ (text) => this.setState({email: text}) }
-												autoFocus={true}
-												value={this.state.email}
-												placeholder={"Email Address"}
-											/>
-										</View>
+										<View style={styles.accountAuthFields}>
 
-										<View style={[styles.modalAuth, styles.newPass]}>
-											<Text style={{color:'black'}}>New Pass: </Text>
-											<TextInput style={[styles.loginTextInput]}
-												onChangeText={ (text) => this.setState({password: text}) }
-												value={this.state.password}
-												secureTextEntry={true}
-												placeholder={"New Password"}
-											/>
-										</View>
+											<View style={[styles.modalAuth, styles.newUsername]}>
+												<Text style={{color:'black'}}>New Name: </Text>
+												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.007}]}
+													onChangeText={ (text) => this.setState({newEmail: text}) }
+													value={this.state.newUsername}
+													placeholder={"Alias"}
+												/>
+											</View>
 
-
-										<View style={[styles.modalAuth, styles.oldPass]}>
-											<Text style={{color:'black'}}>Password: </Text>
-											<TextInput style={[styles.loginTextInput]}
-												onChangeText={ (text) => this.setState({newPass: text}) }
-												value={this.state.newPass}
-												secureTextEntry={true}
-												placeholder={"Old Password"}
-											/>
+											<View style={[styles.modalAuth, styles.newEmail]}>
+												<Text style={{color:'black'}}>New Email: </Text>
+												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.008}]}
+													onChangeText={ (text) => this.setState({newEmail: text}) }
+													value={this.state.newEmail}
+													placeholder={"Email Address"}
+												/>
+											</View>
 										</View>
 									</View>
 
+
+									<View style={[styles.resetPasswordView]}>
+										<Button onPress={ this.resetPassword.bind(this) }>
+											<Text style={{color: 'black', textAlign: 'center'}}>Reset Password?</Text>
+										</Button>
+									</View>
 
 									<View style={styles.accountModalButtons}>
 										<View style={[styles.cancelAccountView]}>
@@ -264,14 +305,16 @@ class ChemistryApp extends Component {
 										</View>
 
 										<View style={[styles.submitAccountView]}>
-											<Button>
+											<Button onPress={ this.updateProfile.bind(this) }>
 												<Text style={{color: 'black'}}>Submit</Text>
 											</Button>
 										</View>			
 									</View>
 
 								</View>
+
 							</View>
+
 						</Modal>
 					</View>
 
@@ -401,7 +444,7 @@ const styles = StyleSheet.create({
     	marginLeft: 0,
     },
 	accountModalHeading: {
-    	marginBottom: height*0.05,
+    	marginBottom: height*0.01,
 
 		borderRadius: 4,
 		borderWidth: 1,
@@ -411,21 +454,31 @@ const styles = StyleSheet.create({
     	color: 'black',
     	marginLeft: width*0.06,
     },
+    accountTextInput: {
+    	width: width*0.6,
+    	height: height*0.09,
+    	marginBottom: 0,
+
+    	top: -1*height*0.03,
+    },
     accountAuthFields: {
-		marginLeft: width*0.15,
+		marginLeft: width*0.12,
 		marginBottom: height*0.01,
+
+		width: width*0.7,
+
     },
 	accountEmail: {
-		marginLeft: width*0.189,
+		marginLeft:0,
+	},
+	accountUsername:{
+		marginBottom: 0,
 	},
 	newEmail: {
-		marginLeft: width*0.1,
+		marginLeft: 0,
 	},
-	newPass: {
-		marginLeft: width*0.115,
-	},
-	oldPass: {
-		marginLeft: width*0.118,
+	newusername: {
+
 	},
 	accountModalButtons: {
 		flexWrap: 'wrap',
@@ -442,6 +495,17 @@ const styles = StyleSheet.create({
 	cancelAccountView: {
 		width: width*0.11,
 		marginRight: width*0.045,
+	},
+	resetPasswordView: {
+
+		width: width*0.35,
+		marginLeft: width*0.31,
+		marginBottom: height*0.05,
+
+
+		borderRadius: 4,
+		borderWidth: 1,
+		borderColor: 'black',
 	},
 
 
