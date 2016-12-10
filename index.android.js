@@ -191,16 +191,37 @@ class ChemistryApp extends Component {
 		//Listener for firebase user login
 		var user = firebase.auth().currentUser;
 
+		if (this.state.newEmail.length > 0){
+			user.updateEmail(this.state.newEmail).catch(function(error){
+				//Error hapened
+				alert("Update error. " + error);
 
-		user.updateEmail(this.state.newEmail).catch(function(error){
-			//Error hapened
-			alert("Update error. " + error);
+			}).then((result)=>{
+				// Update successful.
+				console.log("Email Updated")
 
-		}).then((result)=>{
-			// Update successful.
-			console.log("Email Updated")
-			console.log(user);
-		})
+				this.setState({newEmail: ''})
+
+			})
+		}
+
+		if (this.state.newUsername.length > 0){
+			user.updateProfile({
+
+				displayName: this.state.newUsername,
+
+			}).catch(function(error){
+				//Error hapened
+				alert("Update error. " + error);
+
+			}).then((result)=>{
+				// Update successful.
+				console.log("Name Updated")
+
+				this.setState({newUsername: ''})
+			})
+		}
+
 	
 	}
 
@@ -273,7 +294,7 @@ class ChemistryApp extends Component {
 											<View style={[styles.modalAuth, styles.newUsername]}>
 												<Text style={{color:'black'}}>New Name: </Text>
 												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.007}]}
-													onChangeText={ (text) => this.setState({newEmail: text}) }
+													onChangeText={ (text) => this.setState({newUsername: text}) }
 													value={this.state.newUsername}
 													placeholder={"Alias"}
 												/>
