@@ -21,7 +21,7 @@ export default class ElementSelector extends Component {
   displayElementsFound(elementsFound){
     return elementsFound.map( (element, i) => {
       return (
-        <Button containerStyle={{height:80}} key={i} onPress={()=>this.getElement(element)}>
+        <Button containerStyle={{width: width*0.232, height:width*0.22}} key={i} onPress={()=>this.getElement(element)}>
           <View style={styles.elementDiv} key={i}>
             <Text style={[styles.elementNumber, styles.elementFont]} key={i}>{element.atomicNumber}</Text>
             <Text style={[styles.elementAcronym, styles.elementFont]}>{element.elementAcronym}</Text>
@@ -66,8 +66,6 @@ const styles = StyleSheet.create({
 	},
 
 	elementDiv:{
-		width: width*0.21,
-		height: width*0.21,
 		marginTop: height*0.005,
 		marginLeft: width*0.023,
 

@@ -46,6 +46,11 @@ class ChemistryApp extends Component {
 			accountModalVisible: false,
 		};
 
+    this.loggedHeader = this.loggedHeader.bind(this);
+    this.notLoggedHeader = this.notLoggedHeader.bind(this);
+    this.keyboardRend = this.keyboardRend.bind(this);
+    this.elemSelectorRend = this.elemSelectorRend.bind(this);
+
     this.grabUserEmail = this.grabUserEmail.bind(this);
     this.grabUserPassword = this.grabUserPassword.bind(this);
     this.grabNewUserName = this.grabNewUserName.bind(this);
@@ -99,8 +104,8 @@ class ChemistryApp extends Component {
   }
 
 	getKeypress(newText){
-		console.log("------------------------------------------");
-		console.log("User pressed: " + newText);
+		//console.log("------------------------------------------");
+		//console.log("User pressed: " + newText);
 
     let totalText = '';
 
@@ -189,8 +194,8 @@ class ChemistryApp extends Component {
     }
   }
 	getElement(newElement){
-		console.log("------------------------------------------");
-		console.log("User selected " + newElement.elementName);
+		//console.log("------------------------------------------");
+		//console.log("User selected " + newElement.elementName);
 
 		// Push the element and multiplier into their respective arrays
     let currentElements = this.state.elements;
@@ -249,21 +254,31 @@ class ChemistryApp extends Component {
 
 
 	login(){
-		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(error => {
-			// Handle Errors here.
-			const errorCode = error.code;
-			const errorMessage = error.message;
+    //Login and then get the users saved data.
 
-			alert("Error " + errorCode + ". " + errorMessage)
+    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(error => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert("Error " + errorCode + ". " + errorMessage)
 
-		}).then((userData) => {
-			//console.log(userData);
+    }).then( user => {
+      //console.log(user);
+      if(user){
+        firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
 
-			this.setState({
-        loginModalVisible: false,
-				logged: true,
-			});
-		})
+          //Grab 'snapshot' of the users saved compounds.
+          const allCompounds = snapshot.val();
+
+          this.setState({
+            user:user,
+            userSavedCompounds: allCompounds,
+            logged:true,
+            loginModalVisible: false,
+          });
+        });
+      }
+    });
 	}
 	logout(){
 		firebase.auth().signOut().catch(function(error){
@@ -348,128 +363,231 @@ class ChemistryApp extends Component {
 		})
 	}
 
-	render() {
-		//Listener for firebase user login
-		const user = firebase.auth().currentUser;
 
-		//if (!user){ console.log("Welcome to Mobile Molecular Weight") }
+
+  loggedHeader(){
+
+    console.log(this.state.user)
+
+    //Keep this conditional
+    if (this.state.logged){
+      return(
+        <View>
+          <View>
+            <Modal
+              animationType={"none"} 
+              transparent={false}
+              visible={this.state.accountModalVisible}
+              onRequestClose={ () => {alert("Modal closed")} }
+            >
+              <View>
+                <View style={[styles.accountModalHeading]}>
+                  <Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
+                  <Text style={[styles.accountModalText, {marginLeft: width*0.09}]}>Thank you for using Mobile Molecular Weight!</Text>
+                </View>
+
+                <View style={[styles.accountModalContent]}>
+
+                  <View >
+                    <View style={styles.accountAuthFields}>
+                      <View style={[styles.modalAuth, styles.accountUsername]}>
+                        <Text style={{color:'black'}}>Username: </Text>
+                        <TextInput style={[styles.accountTextInput, {marginLeft: width*0.01}]}
+                          editable={false}
+                          underlineColorAndroid={'white'}
+                          placeholder={this.state.user.displayName}
+                        />
+                      </View>
+
+                      <View style={[styles.modalAuth, styles.accountEmail]}>
+                        <Text style={{color:'black'}}>Email: </Text>
+                        <TextInput style={[styles.accountTextInput,  {marginLeft: width*0.1}]}
+                          underlineColorAndroid={'white'}
+                          editable={false}
+                          placeholder={this.state.user.email}
+                        />
+                      </View>
+                    </View>
+
+                    <View style={styles.accountAuthFields}>
+
+                      <View style={[styles.modalAuth, styles.newUsername]}>
+                        <Text style={{color:'black'}}>New Name: </Text>
+                        <TextInput style={[styles.accountTextInput, {marginLeft: width*0.007}]}
+                          onChangeText={this.grabNewUserName}
+                          value={this.state.newUsername}
+                          placeholder={"Alias"}
+                        />
+                      </View>
+
+                      <View style={[styles.modalAuth, styles.newEmail]}>
+                        <Text style={{color:'black'}}>New Email: </Text>
+                        <TextInput style={[styles.accountTextInput, {marginLeft: width*0.008}]}
+                          onChangeText={this.grabNewEmail}
+                          value={this.state.newEmail}
+                          placeholder={"Email Address"}
+                        />
+                      </View>
+                    </View>
+                  </View>
+
+
+                  <View style={[styles.resetPasswordView]}>
+                    <Button onPress={ this.resetPassword }>
+                      <Text style={{color: 'black', textAlign: 'center'}}>Reset Password?</Text>
+                    </Button>
+                  </View>
+
+                  <View style={styles.accountModalButtons}>
+                    <View style={[styles.cancelAccountView]}>
+                      <Button onPress={()=>this.setAccountModalVisible(false)}>
+                        <Text style={{color: 'black'}}>Close</Text>
+                      </Button>
+                    </View>
+
+                    <View style={[styles.submitAccountView]}>
+                      <Button onPress={this.updateProfile}>
+                        <Text style={{color: 'black'}}>Submit</Text>
+                      </Button>
+                    </View>     
+                  </View>
+
+                </View>
+
+              </View>
+
+            </Modal>
+          </View>
+
+          <View style={[styles.header]}>
+
+            <Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
+
+            <View style={[styles.accountButtons]}>
+
+              <View style={styles.myAccountButtonView}>
+                <Button onPress={()=>this.setAccountModalVisible(true)}>
+                  <Text style={{color: 'black'}}>My Account</Text>
+                </Button>
+              </View>
+
+              <View style={styles.logoutButtonView}>
+                <Button onPress={this.logout}>
+                  <Text>Log Out</Text>
+                </Button>
+              </View>
+
+            </View>
+          </View>
+        </View>
+      ) 
+    }
+  }
+  notLoggedHeader(){
+    return(
+      <View>
+        <View>
+          <Modal
+            animationType={"none"} 
+            transparent={false}
+            visible={this.state.loginModalVisible}
+            onRequestClose={ () => {alert("Modal closed")} }
+          >
+            <View style={[styles.loginModalContent]}>
+
+              <View style={[styles.loginModalHeading]}>
+                <Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
+                <Text style={[styles.loginModalText]}>Log in or create an account to save your molecules.</Text>
+              </View>
+
+              <View style={styles.loginAuthFields}>
+                <View style={[styles.modalAuth, styles.modalEmail]}>
+                  <Text style={{color:'black'}}>Email: </Text>
+                  <TextInput style={[styles.loginTextInput]}
+                    underlineColorAndroid={'white'}
+                    autoFocus={true}
+                    onChangeText={this.grabUserEmail}
+                    //value={this.state.email}
+                    placeholder={"Email Address"}
+                  />
+                </View>
+
+                <View style={[styles.modalAuth, styles.modalPass]}>
+                  <Text style={{color:'black'}}>Password: </Text>
+                  <TextInput style={[styles.loginTextInput]}
+                    onChangeText={this.grabUserPassword}
+                    //value={this.state.password}
+                    secureTextEntry={true}
+                    placeholder={"Password"}
+                  />
+                </View>
+              </View>
+
+              <View style={[styles.loginModalButtons]}>
+
+                <View style={[styles.signupView]}>
+                  <Button onPress={this.signup}>
+                    <Text style={{color:'black'}}>Sign Up</Text>
+                  </Button>
+                </View>
+
+                <View style={[styles.loginView]}>
+                  <Button onPress={this.login}>
+                    <Text style={{color:'black'}}>Log In</Text>
+                  </Button>
+                </View>
+
+                <View style={[styles.cancelLoginView]}>
+                  <Button onPress={()=>this.setLoginModalVisible(false)}>
+                    <Text style={{color:'black'}}>Close</Text>
+                  </Button>
+                </View>
+
+              </View>
+            </View>
+          </Modal>
+        </View>
+
+        <View style={[styles.header]}>
+
+          <Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
+
+          <View style={[styles.loginHeaderButton]}>
+            <Button onPress={()=>this.setLoginModalVisible(true)}>
+              <Text style={[styles.headerButtonText]}>Login/Sign Up</Text>
+            </Button>
+          </View>
+        </View>
+      </View>
+    )
+  }
+  keyboardRend(){
+    return (
+      <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
+    )
+  }
+  elemSelectorRend(){
+    return (
+      <ElementSelector elementsFound={this.state.elementsFound} newElement={this.getElement}/>
+    )
+  }
+
+	render() {
+
+
+    const notLogged = this.notLoggedHeader();
+    const keyboard = this.keyboardRend();
+    const selector = this.elemSelectorRend();
 
 		//If user is logged in
-		if (user){
+		if (this.state.logged){
+      const logged = this.loggedHeader();
 			return (
 				<View style={[styles.main]}>
-					<View>
-						<Modal
-							animationType={"none"} 
-							transparent={false}
-							visible={this.state.accountModalVisible}
-							onRequestClose={ () => {alert("Modal closed")} }
-						>
-							<View>
-								<View style={[styles.accountModalHeading]}>
-									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-									<Text style={[styles.accountModalText, {marginLeft: width*0.09}]}>Thank you for using Mobile Molecular Weight!</Text>
-								</View>
-
-								<View style={[styles.accountModalContent]}>
-
-									<View >
-										<View style={styles.accountAuthFields}>
-											<View style={[styles.modalAuth, styles.accountUsername]}>
-												<Text style={{color:'black'}}>Username: </Text>
-												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.01}]}
-													editable={false}
-													underlineColorAndroid={'white'}
-													placeholder={user.displayName}
-												/>
-											</View>
-
-											<View style={[styles.modalAuth, styles.accountEmail]}>
-												<Text style={{color:'black'}}>Email: </Text>
-												<TextInput style={[styles.accountTextInput,  {marginLeft: width*0.1}]}
-													underlineColorAndroid={'white'}
-													editable={false}
-													placeholder={user.email}
-												/>
-											</View>
-										</View>
-
-										<View style={styles.accountAuthFields}>
-
-											<View style={[styles.modalAuth, styles.newUsername]}>
-												<Text style={{color:'black'}}>New Name: </Text>
-												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.007}]}
-													onChangeText={this.grabNewUserName}
-													value={this.state.newUsername}
-													placeholder={"Alias"}
-												/>
-											</View>
-
-											<View style={[styles.modalAuth, styles.newEmail]}>
-												<Text style={{color:'black'}}>New Email: </Text>
-												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.008}]}
-													onChangeText={this.grabNewEmail}
-													value={this.state.newEmail}
-													placeholder={"Email Address"}
-												/>
-											</View>
-										</View>
-									</View>
-
-
-									<View style={[styles.resetPasswordView]}>
-										<Button onPress={ this.resetPassword }>
-											<Text style={{color: 'black', textAlign: 'center'}}>Reset Password?</Text>
-										</Button>
-									</View>
-
-									<View style={styles.accountModalButtons}>
-										<View style={[styles.cancelAccountView]}>
-											<Button onPress={()=>this.setAccountModalVisible(false)}>
-												<Text style={{color: 'black'}}>Close</Text>
-											</Button>
-										</View>
-
-										<View style={[styles.submitAccountView]}>
-											<Button onPress={this.updateProfile}>
-												<Text style={{color: 'black'}}>Submit</Text>
-											</Button>
-										</View>			
-									</View>
-
-								</View>
-
-							</View>
-
-						</Modal>
-					</View>
-
-					<View style={[styles.header]}>
-
-						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
-
-						<View style={[styles.accountButtons]}>
-
-							<View style={styles.myAccountButtonView}>
-								<Button onPress={()=>this.setAccountModalVisible(true)}>
-									<Text style={{color: 'black'}}>My Account</Text>
-								</Button>
-							</View>
-
-							<View style={styles.logoutButtonView}>
-								<Button onPress={this.logout}>
-									<Text>Log Out</Text>
-								</Button>
-							</View>
-
-						</View>
-					</View>
-
-				    <ElementSelector elementsFound={this.state.elementsFound} newElement={this.getElement}/>
-
-				    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multipliers} total={this.state.total} newEdit={this.getEdit} />
-
-				    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
+            {logged}
+            {selector}
+            <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multipliers} total={this.state.total} newEdit={this.getEdit} />
+            {keyboard}
 				</View>
 			)
 		}
@@ -477,84 +595,10 @@ class ChemistryApp extends Component {
 		//Else if no one is logged in
 		return (
 			<View style={[styles.main]}>
-				<View>
-					<Modal
-						animationType={"none"} 
-						transparent={false}
-						visible={this.state.loginModalVisible}
-						onRequestClose={ () => {alert("Modal closed")} }
-					>
-						<View style={[styles.loginModalContent]}>
-
-							<View style={[styles.loginModalHeading]}>
-								<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-								<Text style={[styles.loginModalText]}>Log in or create an account to save your molecules.</Text>
-							</View>
-
-							<View style={styles.loginAuthFields}>
-								<View style={[styles.modalAuth, styles.modalEmail]}>
-									<Text style={{color:'black'}}>Email: </Text>
-									<TextInput style={[styles.loginTextInput]}
-										underlineColorAndroid={'white'}
-										autoFocus={true}
-										onChangeText={this.grabUserEmail}
-										//value={this.state.email}
-										placeholder={"Email Address"}
-									/>
-								</View>
-
-								<View style={[styles.modalAuth, styles.modalPass]}>
-									<Text style={{color:'black'}}>Password: </Text>
-									<TextInput style={[styles.loginTextInput]}
-										onChangeText={this.grabUserPassword}
-										//value={this.state.password}
-										secureTextEntry={true}
-										placeholder={"Password"}
-									/>
-								</View>
-							</View>
-
-							<View style={[styles.loginModalButtons]}>
-
-								<View style={[styles.signupView]}>
-									<Button onPress={this.signup}>
-										<Text style={{color:'black'}}>Sign Up</Text>
-									</Button>
-								</View>
-
-								<View style={[styles.loginView]}>
-									<Button onPress={this.login}>
-										<Text style={{color:'black'}}>Log In</Text>
-									</Button>
-								</View>
-
-								<View style={[styles.cancelLoginView]}>
-									<Button onPress={()=>this.setLoginModalVisible(false)}>
-										<Text style={{color:'black'}}>Close</Text>
-									</Button>
-								</View>
-
-							</View>
-						</View>
-					</Modal>
-				</View>
-
-				<View style={[styles.header]}>
-
-					<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
-
-					<View style={[styles.loginHeaderButton]}>
-						<Button onPress={()=>this.setLoginModalVisible(true)}>
-							<Text style={[styles.headerButtonText]}>Login/Sign Up</Text>
-						</Button>
-					</View>
-				</View>
-
-			    <ElementSelector elementsFound={this.state.elementsFound} newElement={this.getElement}/>
-
+          {notLogged}
+          {selector}
 			    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multipliers} total={this.state.total} newEdit={this.getEdit} />
-
-			    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
+          {keyboard}
 			</View>
 		)
 

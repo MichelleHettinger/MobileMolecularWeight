@@ -19,6 +19,7 @@ export default class KeyboardComponent extends Component {
 
 	}
 	getKeyPress(input) {
+    //Goes to index.android.js
 		this.props.newKeyPress(input)
 	}
 
