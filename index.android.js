@@ -73,6 +73,7 @@ class ChemistryApp extends Component {
 		this.resetPassword = this.resetPassword.bind(this);
 	}
 
+  //LoginModal methods
   grabUserEmail(userEmail){
     console.log(userEmail)
 
@@ -87,6 +88,55 @@ class ChemistryApp extends Component {
       password: userPassword,
     });
   }
+  setLoginModalVisible(visible){
+
+    this.setState({loginModalVisible: visible});
+  }
+  login(){
+    //Login and then get the users saved data.
+
+    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(error => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert("Error " + errorCode + ". " + errorMessage)
+
+    }).then( user => {
+      //console.log(user);
+      if(user){
+        firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
+
+          //Grab 'snapshot' of the users saved compounds.
+          const allCompounds = snapshot.val();
+
+          this.setState({
+            user:user,
+            userSavedCompounds: allCompounds,
+            logged:true,
+            loginModalVisible: false,
+          });
+        });
+      }
+    });
+  }
+  signup(){
+    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // ...
+
+      alert("Error " + errorCode + ". " + errorMessage)
+
+    }).then((newUserData) => {
+
+      console.log(newUserData);
+      this.setLoginModalVisible(false);
+
+    });
+  }
+
+  //MyAccountModal methods
   grabNewEmail(newEmail){
     this.setState({
       newEmail: newEmail,
@@ -102,7 +152,62 @@ class ChemistryApp extends Component {
       newPassword: newPassword,
     });
   }
+  setAccountModalVisible(visible){
 
+    this.setState({accountModalVisible: visible})
+  }
+  updateProfile(){
+    //This is where the submit button goes
+    
+    //Listener for firebase user login
+    const user = firebase.auth().currentUser;
+
+    if (this.state.newEmail.length > 0){
+      user.updateEmail(this.state.newEmail).catch(function(error){
+        //Error hapened
+        alert("Update error. " + error);
+
+      }).then((result)=>{
+        // Update successful.
+        console.log("Email Updated")
+
+        this.setState({newEmail: ''})
+
+      })
+    }
+
+    if (this.state.newUsername.length > 0){
+      user.updateProfile({
+
+        displayName: this.state.newUsername,
+
+      }).catch(function(error){
+        //Error hapened
+        alert("Update error. " + error);
+
+      }).then((result)=>{
+        // Update successful.
+        console.log("Name Updated")
+
+        this.setState({newUsername: ''})
+      })
+    }
+  }
+  resetPassword(){
+
+    auth.sendPasswordResetEmail(this.state.email).catch(function(error){
+      //Error hapened
+      alert("Update error. " + error);
+
+    }).then((result)=>{
+      // Update successful.
+      console.log("Email sent!")
+      console.log(result);
+
+    })
+  }
+
+  //Methods getting data from other components
 	getKeypress(newText){
 		//console.log("------------------------------------------");
 		//console.log("User pressed: " + newText);
@@ -122,7 +227,6 @@ class ChemistryApp extends Component {
 
 		//console.log(this.state)
 	}
-
   findElements (userInput) {
     //Find the right elements, then setState for found elements.
 
@@ -245,126 +349,7 @@ class ChemistryApp extends Component {
 		console.log(this.state);
 	}
 
-	setLoginModalVisible(visible){
-		this.setState({loginModalVisible: visible});
-	}
-	setAccountModalVisible(visible){
-		this.setState({accountModalVisible: visible})
-	}
-
-
-	login(){
-    //Login and then get the users saved data.
-
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(error => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert("Error " + errorCode + ". " + errorMessage)
-
-    }).then( user => {
-      //console.log(user);
-      if(user){
-        firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
-
-          //Grab 'snapshot' of the users saved compounds.
-          const allCompounds = snapshot.val();
-
-          this.setState({
-            user:user,
-            userSavedCompounds: allCompounds,
-            logged:true,
-            loginModalVisible: false,
-          });
-        });
-      }
-    });
-	}
-	logout(){
-		firebase.auth().signOut().catch(function(error){
-
-			alert("Error " + error);
-
-		}).then(function() {
-
-			this.setState({
-				logged: false,
-			});
-
-			alert("You have signed out");
-
-		}.bind(this))
-	}
-	signup(){
-		firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
-		  // Handle Errors here.
-		  const errorCode = error.code;
-		  const errorMessage = error.message;
-		  // ...
-
-		  alert("Error " + errorCode + ". " + errorMessage)
-
-		}).then((newUserData) => {
-
-			console.log(newUserData);
-			this.setLoginModalVisible(false);
-
-		});
-	}
-
-
-	updateProfile(){
-
-		//Listener for firebase user login
-		const user = firebase.auth().currentUser;
-
-		if (this.state.newEmail.length > 0){
-			user.updateEmail(this.state.newEmail).catch(function(error){
-				//Error hapened
-				alert("Update error. " + error);
-
-			}).then((result)=>{
-				// Update successful.
-				console.log("Email Updated")
-
-				this.setState({newEmail: ''})
-
-			})
-		}
-
-		if (this.state.newUsername.length > 0){
-			user.updateProfile({
-
-				displayName: this.state.newUsername,
-
-			}).catch(function(error){
-				//Error hapened
-				alert("Update error. " + error);
-
-			}).then((result)=>{
-				// Update successful.
-				console.log("Name Updated")
-
-				this.setState({newUsername: ''})
-			})
-		}
-	}
-	resetPassword(){
-
-		auth.sendPasswordResetEmail(this.state.email).catch(function(error){
-			//Error hapened
-			alert("Update error. " + error);
-
-		}).then((result)=>{
-			// Update successful.
-			console.log("Email sent!")
-			console.log(result);
-
-		})
-	}
-
-
-
+  //Methods for header when logged in
   loggedHeader(){
 
     console.log(this.state.user)
@@ -483,6 +468,23 @@ class ChemistryApp extends Component {
       ) 
     }
   }
+	logout(){
+		firebase.auth().signOut().catch(function(error){
+
+			alert("Error " + error);
+
+		}).then(function() {
+
+			this.setState({
+				logged: false,
+			});
+
+			alert("You have signed out");
+
+		}.bind(this))
+	}
+
+  //Methods for header when not logged in
   notLoggedHeader(){
     return(
       <View>
@@ -561,6 +563,8 @@ class ChemistryApp extends Component {
       </View>
     )
   }
+
+  //Keyboard and element selector components
   keyboardRend(){
     return (
       <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
@@ -573,8 +577,6 @@ class ChemistryApp extends Component {
   }
 
 	render() {
-
-
     const notLogged = this.notLoggedHeader();
     const keyboard = this.keyboardRend();
     const selector = this.elemSelectorRend();
