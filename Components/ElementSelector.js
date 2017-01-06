@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import {AppRegistry, StyleSheet, View, Text, Navigator, Dimensions} from 'react-native';
 import Button from 'react-native-button';
 
-
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-
 
 export default class ElementSelector extends Component {
 	constructor(props) {
@@ -94,5 +92,4 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		fontSize: height*0.018,
 	}
-
 });

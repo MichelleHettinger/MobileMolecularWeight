@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Text, View, TextInput, Modal, StyleSheet, Dimensions, AppRegistry} from 'react-native';
 import Button from 'react-native-button';
 
+import ElementsArray from './Components/ElementsArray.js';
+
 import ElementSelector from './Components/ElementSelector.js';
 import CalculatorPanel from './Components/CalcPanel.js';
 import Keyboard from './Components/Keyboard.js';
-
-import ElementsArray from './Components/ElementsArray.js';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -40,49 +40,57 @@ class ChemistryApp extends Component {
 			newEmail: '',
 			newUsername: '',
 
+      user: {},
+      userSavedCompounds: {},
+
 			logged: false,
 			
 			loginModalVisible: false,
 			accountModalVisible: false,
 		};
 
-    this.loggedHeader = this.loggedHeader.bind(this);
-    this.notLoggedHeader = this.notLoggedHeader.bind(this);
-    this.keyboardRend = this.keyboardRend.bind(this);
-    this.elemSelectorRend = this.elemSelectorRend.bind(this);
-
+    //LoginModal methods
     this.grabUserEmail = this.grabUserEmail.bind(this);
     this.grabUserPassword = this.grabUserPassword.bind(this);
+    this.login = this.login.bind(this);
+    this.signup = this.signup.bind(this);
+
+    //MyAccountModal methods
+    this.grabNewEmail = this.grabNewEmail.bind(this);
     this.grabNewUserName = this.grabNewUserName.bind(this);
     this.grabNewPassword = this.grabNewPassword.bind(this);
-    this.grabNewEmail = this.grabNewEmail.bind(this);
+    this.updateProfile = this.updateProfile.bind(this);
+    this.resetPassword = this.resetPassword.bind(this);
 
+    //Methods getting data from other components
 		this.getKeypress = this.getKeypress.bind(this);
     this.findElements = this.findElements.bind(this);
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
 
-    //this.setLoginModalVisible = this.setLoginModalVisible.bind(this);
-    //this.setAccountModalVisible = this.setAccountModalVisible.bind(this);
-
-		this.login = this.login.bind(this);
+    //Methods for header when logged in
+    this.loggedHeader = this.loggedHeader.bind(this);
 		this.logout = this.logout.bind(this);
-		this.signup = this.signup.bind(this);
 
-		this.updateProfile = this.updateProfile.bind(this);
-		this.resetPassword = this.resetPassword.bind(this);
+    //Methods for header when not logged in
+    this.notLoggedHeader = this.notLoggedHeader.bind(this);
+
+    //Keyboard and element selector components
+    this.keyboardRend = this.keyboardRend.bind(this);
+    this.elemSelectorRend = this.elemSelectorRend.bind(this);
+    this.calcPanelRend = this.calcPanelRend.bind(this);
 	}
 
   //LoginModal methods
   grabUserEmail(userEmail){
-    console.log(userEmail)
+    //console.log(userEmail)
 
     this.setState({
       email: userEmail,
     });
   }
   grabUserPassword(userPassword){
-    console.log(userPassword)
+    //console.log(userPassword)
 
     this.setState({
       password: userPassword,
@@ -567,19 +575,38 @@ class ChemistryApp extends Component {
   //Keyboard and element selector components
   keyboardRend(){
     return (
-      <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
+      <Keyboard
+        newKeyPress={this.getKeypress}
+        userInput={this.state.text}
+      />
     )
   }
   elemSelectorRend(){
     return (
-      <ElementSelector elementsFound={this.state.elementsFound} newElement={this.getElement}/>
+      <ElementSelector
+        elementsFound={this.state.elementsFound}
+        newElement={this.getElement}
+      />
+    )
+  }
+  calcPanelRend(){
+    return (
+      <CalculatorPanel
+        user={this.state.user}
+        selectedElements={this.state.elements}
+        elementMultipliers={this.state.multipliers}
+        total={this.state.total}
+        newEdit={this.getEdit}
+      />
     )
   }
 
 	render() {
+
     const notLogged = this.notLoggedHeader();
     const keyboard = this.keyboardRend();
     const selector = this.elemSelectorRend();
+    const calcpanel = this.calcPanelRend();
 
 		//If user is logged in
 		if (this.state.logged){
@@ -588,7 +615,7 @@ class ChemistryApp extends Component {
 				<View style={[styles.main]}>
             {logged}
             {selector}
-            <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multipliers} total={this.state.total} newEdit={this.getEdit} />
+            {calcpanel}
             {keyboard}
 				</View>
 			)
@@ -599,46 +626,43 @@ class ChemistryApp extends Component {
 			<View style={[styles.main]}>
           {notLogged}
           {selector}
-			    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multipliers} total={this.state.total} newEdit={this.getEdit} />
+          {calcpanel}
           {keyboard}
 			</View>
 		)
-
 	}
 }
 
 const styles = StyleSheet.create({
 
 	//	Account Modal //
-    accountModalContent: {
-    	marginTop: height*0.01,
-    	marginLeft: 0,
-    },
+  accountModalContent: {
+  	marginTop: height*0.01,
+  	marginLeft: 0,
+  },
 	accountModalHeading: {
-    	marginBottom: height*0.01,
+  	marginBottom: height*0.01,
 
 		borderRadius: 4,
 		borderWidth: 1,
 		borderColor: 'black',
 	},
-    accountModalText: {
-    	color: 'black',
-    	marginLeft: width*0.06,
-    },
-    accountTextInput: {
-    	width: width*0.6,
-    	height: height*0.09,
-    	marginBottom: 0,
+  accountModalText: {
+  	color: 'black',
+  	marginLeft: width*0.06,
+  },
+  accountTextInput: {
+  	width: width*0.6,
+  	height: height*0.09,
+  	marginBottom: 0,
 
-    	top: -1*height*0.03,
-    },
-    accountAuthFields: {
-		marginLeft: width*0.12,
-		marginBottom: height*0.01,
-
-		width: width*0.7,
-
-    },
+  	top: -1*height*0.03,
+  },
+  accountAuthFields: {
+	 marginLeft: width*0.12,
+	 marginBottom: height*0.01,
+	 width: width*0.7,
+  },
 	accountEmail: {
 		marginLeft:0,
 	},
@@ -668,11 +692,9 @@ const styles = StyleSheet.create({
 		marginRight: width*0.045,
 	},
 	resetPasswordView: {
-
 		width: width*0.35,
 		marginLeft: width*0.31,
 		marginBottom: height*0.05,
-
 
 		borderRadius: 4,
 		borderWidth: 1,
@@ -681,144 +703,137 @@ const styles = StyleSheet.create({
 
 
 
+  main: {
+  	marginTop: height*0.01,
+  	marginLeft: width*0.02,
+  },
+
+  //Both headers
+  header: {
+	width: width*0.96,
+	height: height*0.08,
+
+	borderRadius: 4,
+	borderWidth: 1,
+	borderColor: 'black',
+  },
+  headerTitle: {
+  	textAlign: 'center',
+  	color: 'black',
+  	fontSize: width*0.05,
+  },
+  headerButtonText: {
+  	textAlign: 'center',
+  	fontSize: height*0.02
+  },
+
+  //Both modals
+  modalTitle: {
+  	textAlign: 'center',
+  	fontSize: height*0.045,
+  	color: 'black',
+  },
+  loginModalText: {
+  	color: 'black',
+  	marginLeft: width*0.06,
+  },
+
+  //View tag for login/signup button
+  loginHeaderButton: {
+  	width: width*0.25,
+  	marginLeft: width*0.35,
+  },
+
+  //View tag for everything in the login modal
+  loginModalContent: {
+  	marginTop: height*0.01,
+  	marginLeft: 0,
 
 
+	// borderRadius: 4,
+	// borderWidth: 1,
+	// borderColor: 'black',
+  },
+
+  //View for the heading with login/signup button
+  loginModalHeading: {
+  	marginBottom: height*0.05,
+
+	borderRadius: 4,
+	borderWidth: 1,
+	borderColor: 'black',
+  },
+
+  //View tag for each auth input element
+  loginAuthFields: {
+	marginLeft: width*0.15,
+	marginBottom: height*0.01,
+  },
+  modalAuth: {
+  	flexWrap: 'wrap',
+  	flexDirection: 'row',
+
+	width: width*0.85,
+	height: height*0.055,
+
+  },
+
+  //The view tags for input field
+  modalEmail: {
+  	marginLeft: width*0.16,
+  },
+  modalPass: {
+  	marginLeft: width*0.089,
+  },
+
+  //Text box
+  loginTextInput: {
+  	width: width*0.6,
+  	height: height*0.09,
+  	marginBottom: 0,
+
+  	top: -1*height*0.03,
+
+	// borderRadius: 4,
+	// borderWidth: 1,
+	// borderColor: 'black',
+  },
+
+  //Log in
+  loginModalButtons:{
+  	flexWrap: 'wrap',
+  	flexDirection: 'row',
+
+  	width: width*0.3,
+  	height: height*0.05,
+  	marginLeft: width*0.33,
 
 
+	// borderRadius: 4,
+	// borderWidth: 1,
+	// borderColor: 'black',
 
-    main: {
-    	marginTop: height*0.01,
-    	marginLeft: width*0.02,
-    },
+  },
 
-    //Both headers
-    header: {
-		width: width*0.96,
-		height: height*0.08,
+  //View tags for the buttons
+  loginView: {
 
-
-		borderRadius: 4,
-		borderWidth: 1,
-		borderColor: 'black',
-    },
-    headerTitle: {
-    	textAlign: 'center',
-    	color: 'black',
-    	fontSize: width*0.05,
-    },
-    headerButtonText: {
-    	textAlign: 'center',
-    	fontSize: height*0.02
-    },
-
-    //Both modals
-    modalTitle: {
-    	textAlign: 'center',
-    	fontSize: height*0.045,
-    	color: 'black',
-    },
-    loginModalText: {
-    	color: 'black',
-    	marginLeft: width*0.06,
-    },
-
-    //View tag for login/signup button
-    loginHeaderButton: {
-    	width: width*0.25,
-    	marginLeft: width*0.35,
-    },
-
-    //View tag for everything in the login modal
-    loginModalContent: {
-    	marginTop: height*0.01,
-    	marginLeft: 0,
+  },
+  cancelLoginView: {
+  	marginLeft: width*0.08,
+  },
+  signupView:{
+  	marginRight: width*0.03,
+  },
 
 
-		// borderRadius: 4,
-		// borderWidth: 1,
-		// borderColor: 'black',
-    },
+  //View tag for logged in header buttons
+  accountButtons: {
+  	flexWrap: 'wrap',
+  	flexDirection: 'row',
 
-    //View for the heading with login/signup button
-    loginModalHeading: {
-    	marginBottom: height*0.05,
-
-		borderRadius: 4,
-		borderWidth: 1,
-		borderColor: 'black',
-    },
-
-    //View tag for each auth input element
-    loginAuthFields: {
-		marginLeft: width*0.15,
-		marginBottom: height*0.01,
-    },
-    modalAuth: {
-    	flexWrap: 'wrap',
-    	flexDirection: 'row',
-
-		width: width*0.85,
-		height: height*0.055,
-
-    },
-
-    //The view tags for input field
-    modalEmail: {
-    	marginLeft: width*0.16,
-    },
-    modalPass: {
-    	marginLeft: width*0.089,
-    },
-
-    //Text box
-    loginTextInput: {
-    	width: width*0.6,
-    	height: height*0.09,
-    	marginBottom: 0,
-
-    	top: -1*height*0.03,
-
-		// borderRadius: 4,
-		// borderWidth: 1,
-		// borderColor: 'black',
-    },
-
-    //Log in
-    loginModalButtons:{
-    	flexWrap: 'wrap',
-    	flexDirection: 'row',
-
-    	width: width*0.3,
-    	height: height*0.05,
-    	marginLeft: width*0.33,
-
-
-		// borderRadius: 4,
-		// borderWidth: 1,
-		// borderColor: 'black',
-
-    },
-
-    //View tags for the buttons
-    loginView: {
-
-    },
-    cancelLoginView: {
-    	marginLeft: width*0.08,
-    },
-    signupView:{
-    	marginRight: width*0.03,
-    },
-
-
-
-    //View tag for logged in header buttons
-    accountButtons: {
-    	flexWrap: 'wrap',
-    	flexDirection: 'row',
-
-    	height: height*0.05,
-    },
+  	height: height*0.05,
+  },
 	myAccountButtonView: {
 		width: width*0.23,
 		marginLeft: width*0.375,

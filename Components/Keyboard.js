@@ -4,11 +4,8 @@ import { Text, View, StyleSheet, Dimensions } from 'react-native';
 
 import ElementSelector from './ElementSelector.js';
 
-
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
-
-
 
 export default class KeyboardComponent extends Component {
 	constructor(props, context) {
@@ -46,19 +43,15 @@ export default class KeyboardComponent extends Component {
     const mapRow3 = this.mapAllRows(['z', 'x', 'c', 'v', 'b', 'n', 'm', '<-']);
 
   	return (
-  		<View style={[styles.allRows]} >
-
+  		<View style={[styles.allRows]}>
   			<View style={[styles.inputView]}>
   				<Text style={[styles.inputText]}>{this.props.userInput.toUpperCase()}</Text>
   			</View>
-
   			<View>
   				<View style={[styles.row1]}>{mapRow1}</View>
   				<View style={[styles.row2]}>{mapRow2}</View>
   				<View style={[styles.row3]}>{mapRow3}</View>
   			</View>
-
-
   		</View>
   	);
   }

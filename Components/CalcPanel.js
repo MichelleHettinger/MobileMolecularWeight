@@ -10,13 +10,12 @@ export default class ElementCalculator extends Component {
 		super(props);
 
 		this.getPlusMinus = this.getPlusMinus.bind(this);
-
     this.displayElements = this.displayElements.bind(this);
 	}
 	getPlusMinus(input, element, i) {
+    //console.log(input)
 		this.props.newEdit(input, element, i);
 	}
-
   displayElements(selectedElements){
     return selectedElements.map( (element, i) => {
       return (
@@ -40,12 +39,30 @@ export default class ElementCalculator extends Component {
   }
 
 	render(){
+
+    const user = this.props.user;
+
 		// Upon tapping a selected atom, loop all atoms
 		const elementsToDisplay = this.displayElements(this.props.selectedElements);
 
+    if (user){
+      return (
+        <View style={[styles.calculationPanel]}>
+          <View style={[styles.MWTView]}>
+            <Text style={[styles.MWTText]}>
+              Molecular Weight: {this.props.total.toFixed(3)} g/mol
+            </Text>
+          </View>
+
+          <View style={[styles.elementRows]}>
+            {elementsToDisplay}
+          </View>
+        </View>
+      )
+    }
+
 		return (
 			<View style={[styles.calculationPanel]}>
-
 				<View style={[styles.MWTView]}>
 					<Text style={[styles.MWTText]}>
 						Molecular Weight: {this.props.total.toFixed(3)} g/mol
@@ -55,9 +72,7 @@ export default class ElementCalculator extends Component {
 				<View style={[styles.elementRows]}>
 					{elementsToDisplay}
 				</View>
-
 			</View>
-
 		)
 	}
 }
@@ -95,11 +110,6 @@ const styles = StyleSheet.create({
 
 		marginTop: height*0.01,
 		marginBottom: 0,
-
-		// borderRadius: 4,
-		// borderWidth: 1,
-		// borderColor: 'black',
-
 	},
 
 	plus: {
@@ -123,6 +133,4 @@ const styles = StyleSheet.create({
 
 		fontSize: height*0.015,
 	},
-
-
 });
