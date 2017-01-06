@@ -2,41 +2,46 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import Button from 'react-native-button';
 
-
-var width = Dimensions.get('window').width;
-var height = Dimensions.get('window').height;
-
-
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 export default class ElementCalculator extends Component {
 	constructor(props) {
 		super(props);
+
+		this.getPlusMinus = this.getPlusMinus.bind(this);
+
+    this.displayElements = this.displayElements.bind(this);
 	}
-	_handlePress(input, element, i) {
+	getPlusMinus(input, element, i) {
 		this.props.newEdit(input, element, i);
 	}
+
+  displayElements(selectedElements){
+    return selectedElements.map( (element, i) => {
+      return (
+        <View key={i} style={[styles.elementDiv]}>
+          <Button key={i} onPress={()=>this.getPlusMinus('+', element, i)} style={[styles.plus]}> + </Button>
+
+          <Text style={[styles.acronym]}>
+
+            {element.elementAcronym}
+
+            <Text key={i} style={[styles.subscript]}>
+              {this.props.elementMultipliers[i]}
+            </Text>
+
+          </Text>
+
+          <Button onPress={()=>this.getPlusMinus("-", element, i)} style={[styles.minus]}> - </Button>
+        </View>
+      )
+    })
+  }
+
 	render(){
 		// Upon tapping a selected atom, loop all atoms
-		var elementsToDisplay = this.props.selectedElements.map(function(element, i){
-
-			return (
-				<View key={i} style={[styles.elementDiv]}>
-					<Button key={i} onPress={() => this._handlePress('+', element, i)} style={[styles.plus]}> + </Button>
-
-					<Text style={[styles.acronym]}>
-
-						{element.elementAcronym}
-
-						<Text style={[styles.subscript]}>
-							{this.props.elementMultipliers[i]}
-						</Text>
-
-					</Text>
-
-					<Button onPress={() => this._handlePress("-", element, i)} style={[styles.minus]}> - </Button>
-				</View>
-			)
-		}.bind(this))
+		const elementsToDisplay = this.displayElements(this.props.selectedElements);
 
 		return (
 			<View style={[styles.calculationPanel]}>

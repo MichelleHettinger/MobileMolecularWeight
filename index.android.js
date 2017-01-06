@@ -6,24 +6,23 @@ import ElementSelector from './Components/ElementSelector.js';
 import CalculatorPanel from './Components/CalcPanel.js';
 import Keyboard from './Components/Keyboard.js';
 
-var width = Dimensions.get('window').width;
-var height = Dimensions.get('window').height;
+import ElementsArray from './Components/ElementsArray.js';
 
-
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 //Set up and initialize Firebase
 import * as firebase from 'firebase';
-var config = {
-  apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
-  authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
-  databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
-  storageBucket: "mobile-molecular-weight-85984.appspot.com",
-  messagingSenderId: "837319764944"
+const config = {
+	apiKey: "AIzaSyBQUQPgITUNyCSsjufVVhJp-4laWw21QdU",
+	authDomain: "mobile-molecular-weight-85984.firebaseapp.com",
+	databaseURL: "https://mobile-molecular-weight-85984.firebaseio.com",
+	storageBucket: "mobile-molecular-weight-85984.appspot.com",
+	messagingSenderId: "837319764944"
 };
 
 //Only one instance of firebase can run at a time
 firebase.initializeApp(config);
-
 
 class ChemistryApp extends Component {
 	constructor(props) {
@@ -31,7 +30,8 @@ class ChemistryApp extends Component {
 
 		this.state = {
 			text: '',
-			elements: [], multiplier:[],
+      elementsFound: [],
+			elements: [], multipliers:[],
 			total: 0,
 
 			email: '',
@@ -46,47 +46,168 @@ class ChemistryApp extends Component {
 			accountModalVisible: false,
 		};
 
+    this.grabUserEmail = this.grabUserEmail.bind(this);
+    this.grabUserPassword = this.grabUserPassword.bind(this);
+    this.grabNewUserName = this.grabNewUserName.bind(this);
+    this.grabNewPassword = this.grabNewPassword.bind(this);
+    this.grabNewEmail = this.grabNewEmail.bind(this);
+
 		this.getKeypress = this.getKeypress.bind(this);
+    this.findElements = this.findElements.bind(this);
 		this.getElement = this.getElement.bind(this);
 		this.getEdit = this.getEdit.bind(this);
+
+    //this.setLoginModalVisible = this.setLoginModalVisible.bind(this);
+    //this.setAccountModalVisible = this.setAccountModalVisible.bind(this);
+
+		this.login = this.login.bind(this);
+		this.logout = this.logout.bind(this);
+		this.signup = this.signup.bind(this);
+
+		this.updateProfile = this.updateProfile.bind(this);
+		this.resetPassword = this.resetPassword.bind(this);
 	}
+
+  grabUserEmail(userEmail){
+    console.log(userEmail)
+
+    this.setState({
+      email: userEmail,
+    });
+  }
+  grabUserPassword(userPassword){
+    console.log(userPassword)
+
+    this.setState({
+      password: userPassword,
+    });
+  }
+  grabNewEmail(newEmail){
+    this.setState({
+      newEmail: newEmail,
+    })
+  }
+  grabNewUserName(newUsername){
+    this.setState({
+      newUsername: newUsername,
+    });
+  }
+  grabNewPassword(newPassword){
+    this.setState({
+      newPassword: newPassword,
+    });
+  }
 
 	getKeypress(newText){
 		console.log("------------------------------------------");
-		console.log("User pressed: " + newText)
+		console.log("User pressed: " + newText);
+
+    let totalText = '';
 
 		if (newText == '<-'){
-			var totalText = this.state.text.slice(0, -1)
+			totalText = this.state.text.slice(0, -1);
 		}
 		else {
-			var totalText = this.state.text + newText;
+			totalText = this.state.text + newText;
 		}
-
-		this.state.text = totalText;
 
 		this.setState({
 			text: totalText,
-		})
+		}, () => {this.findElements(totalText)} )
 
-		console.log(this.state)
+		//console.log(this.state)
 	}
+
+  findElements (userInput) {
+    //Find the right elements, then setState for found elements.
+
+    let listElements = [];
+    let listElements2 = [];
+    let listElements3 = [];
+
+    // Loop through every typed letter
+    for (let i=0; i<userInput.length; i++){
+
+      if (i==0){
+        //Loop through all elements
+        for (let j=0; j<ElementsArray.length;j++){
+          //If the letters at position i match, push that element to the array
+          if (userInput.charAt(i) == ElementsArray[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == ElementsArray[j].elementAcronym.charAt(i).toLowerCase()){
+            listElements.push(ElementsArray[j]);
+          } 
+        }         
+      }
+
+      else if (i==1){
+        //Loop through the first list of elements
+        for (let j=0; j<listElements.length;j++){
+          //If the letters at position i match, push that element to a new array
+          if (userInput.charAt(i) == listElements[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements[j].elementAcronym.charAt(i).toLowerCase()){
+            listElements2.push(listElements[j]);
+          } 
+        }
+      }
+
+      else if (i==2){
+        //Loop through the second list of elements
+        for (let j=0; j<listElements2.length;j++){
+          //If the letters at position i match, push that element to a new array
+          if (userInput.charAt(i) == listElements2[j].elementName.charAt(i).toLowerCase() || userInput.charAt(i) == listElements2[j].elementAcronym.charAt(i).toLowerCase()){
+            listElements3.push(listElements2[j]);
+          } 
+        }
+      }   
+    }
+
+    //Depending on how many letters were typed in, display the appropriate array
+    if (userInput.length == 0){
+      this.setState({
+        elementsFound: listElements,
+      })
+    }
+    else if (userInput.length == 1){
+      //console.log(listElements);
+      this.setState({
+        elementsFound: listElements,
+      })
+    }
+    else if (userInput.length == 2){
+      //console.log(listElements2);
+      this.setState({
+        elementsFound: listElements2,
+      })
+    }
+    else if (userInput.length == 3){
+      //console.log(listElements3);
+      this.setState({
+        elementsFound: listElements3,
+      })      }
+    else if (userInput.length >= 4){
+      this.setState({
+        elementsFound: listElements3,
+      })
+    }
+  }
 	getElement(newElement){
 		console.log("------------------------------------------");
 		console.log("User selected " + newElement.elementName);
 
 		// Push the element and multiplier into their respective arrays
-		this.state.elements.push(newElement);
-		this.state.multiplier.push(1);
+    let currentElements = this.state.elements;
+    let currentMultipliers = this.state.multipliers;
+    let currentTotal = this.state.total;
 
-		this.state.total += newElement.mass;
+    currentElements.push(newElement);
+    currentMultipliers.push(1);
+    currentTotal += newElement.mass;
 
 		this.setState({
-			total: this.state.total,
-			elements: this.state.elements,
-			multiplier: this.state.multiplier
+			total: currentTotal,
+			elements: currentElements,
+			multiplier: currentMultipliers
 		});
 
-		console.log(this.state);
+		//console.log(this.state);
 	}
 	getEdit(input, element, i){
 		console.log("------------------------------------------");
@@ -95,17 +216,17 @@ class ChemistryApp extends Component {
 		console.log(i)
 
 		if (input == '+'){
-			this.state.multiplier[i] += 1;
+			this.state.multipliers[i] += 1;
 			this.state.total += element.mass;
 		}
 		else if (input == '-'){
-			this.state.multiplier[i] -= 1;
+			this.state.multipliers[i] -= 1;
 			this.state.total -= element.mass;
 		}
 
-		for (var j=0; j<this.state.multiplier.length; j++){
-			if (this.state.multiplier[j] == 0){
-				this.state.multiplier.splice(j, 1);
+		for (let j=0; j<this.state.multipliers.length; j++){
+			if (this.state.multipliers[j] == 0){
+				this.state.multipliers.splice(j, 1);
 				this.state.elements.splice(j, 1);
 			}
 		}
@@ -113,7 +234,7 @@ class ChemistryApp extends Component {
 		this.setState({
 			total: this.state.total,
 			elements: this.state.elements,
-			multiplier: this.state.multiplier
+			multiplier: this.state.multipliers
 		})
 
 		console.log(this.state);
@@ -128,30 +249,22 @@ class ChemistryApp extends Component {
 
 
 	login(){
-		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+		firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(error => {
 			// Handle Errors here.
-			var errorCode = error.code;
-			var errorMessage = error.message;
+			const errorCode = error.code;
+			const errorMessage = error.message;
 
 			alert("Error " + errorCode + ". " + errorMessage)
 
 		}).then((userData) => {
+			//console.log(userData);
 
-			console.log(userData);
-
-			if (userData){
-				this.setLoginModalVisible(!this.state.loginModalVisible);
-
-				this.setState({
-					logged: true,
-				});
-			}
-			else {
-				console.log("Failed to login")
-			}
+			this.setState({
+        loginModalVisible: false,
+				logged: true,
+			});
 		})
 	}
-
 	logout(){
 		firebase.auth().signOut().catch(function(error){
 
@@ -167,12 +280,11 @@ class ChemistryApp extends Component {
 
 		}.bind(this))
 	}
-
 	signup(){
 		firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
 		  // Handle Errors here.
-		  var errorCode = error.code;
-		  var errorMessage = error.message;
+		  const errorCode = error.code;
+		  const errorMessage = error.message;
 		  // ...
 
 		  alert("Error " + errorCode + ". " + errorMessage)
@@ -180,7 +292,7 @@ class ChemistryApp extends Component {
 		}).then((newUserData) => {
 
 			console.log(newUserData);
-			this.setLoginModalVisible(!this.state.loginModalVisible);
+			this.setLoginModalVisible(false);
 
 		});
 	}
@@ -189,7 +301,7 @@ class ChemistryApp extends Component {
 	updateProfile(){
 
 		//Listener for firebase user login
-		var user = firebase.auth().currentUser;
+		const user = firebase.auth().currentUser;
 
 		if (this.state.newEmail.length > 0){
 			user.updateEmail(this.state.newEmail).catch(function(error){
@@ -221,10 +333,7 @@ class ChemistryApp extends Component {
 				this.setState({newUsername: ''})
 			})
 		}
-
-	
 	}
-
 	resetPassword(){
 
 		auth.sendPasswordResetEmail(this.state.email).catch(function(error){
@@ -241,9 +350,9 @@ class ChemistryApp extends Component {
 
 	render() {
 		//Listener for firebase user login
-		var user = firebase.auth().currentUser;
+		const user = firebase.auth().currentUser;
 
-		if (!user){ console.log("Welcome to Mobile Molecular Weight") }
+		//if (!user){ console.log("Welcome to Mobile Molecular Weight") }
 
 		//If user is logged in
 		if (user){
@@ -257,22 +366,18 @@ class ChemistryApp extends Component {
 							onRequestClose={ () => {alert("Modal closed")} }
 						>
 							<View>
-
 								<View style={[styles.accountModalHeading]}>
 									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
 									<Text style={[styles.accountModalText, {marginLeft: width*0.09}]}>Thank you for using Mobile Molecular Weight!</Text>
 								</View>
 
-
 								<View style={[styles.accountModalContent]}>
-
 
 									<View >
 										<View style={styles.accountAuthFields}>
 											<View style={[styles.modalAuth, styles.accountUsername]}>
 												<Text style={{color:'black'}}>Username: </Text>
 												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.01}]}
-													onChangeText={ (text) => this.setState({newUsername: text}) }
 													editable={false}
 													underlineColorAndroid={'white'}
 													placeholder={user.displayName}
@@ -283,7 +388,7 @@ class ChemistryApp extends Component {
 												<Text style={{color:'black'}}>Email: </Text>
 												<TextInput style={[styles.accountTextInput,  {marginLeft: width*0.1}]}
 													underlineColorAndroid={'white'}
-													editable = {false}
+													editable={false}
 													placeholder={user.email}
 												/>
 											</View>
@@ -294,7 +399,7 @@ class ChemistryApp extends Component {
 											<View style={[styles.modalAuth, styles.newUsername]}>
 												<Text style={{color:'black'}}>New Name: </Text>
 												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.007}]}
-													onChangeText={ (text) => this.setState({newUsername: text}) }
+													onChangeText={this.grabNewUserName}
 													value={this.state.newUsername}
 													placeholder={"Alias"}
 												/>
@@ -303,7 +408,7 @@ class ChemistryApp extends Component {
 											<View style={[styles.modalAuth, styles.newEmail]}>
 												<Text style={{color:'black'}}>New Email: </Text>
 												<TextInput style={[styles.accountTextInput, {marginLeft: width*0.008}]}
-													onChangeText={ (text) => this.setState({newEmail: text}) }
+													onChangeText={this.grabNewEmail}
 													value={this.state.newEmail}
 													placeholder={"Email Address"}
 												/>
@@ -313,20 +418,20 @@ class ChemistryApp extends Component {
 
 
 									<View style={[styles.resetPasswordView]}>
-										<Button onPress={ this.resetPassword.bind(this) }>
+										<Button onPress={ this.resetPassword }>
 											<Text style={{color: 'black', textAlign: 'center'}}>Reset Password?</Text>
 										</Button>
 									</View>
 
 									<View style={styles.accountModalButtons}>
 										<View style={[styles.cancelAccountView]}>
-											<Button onPress={ ()=>{ this.setAccountModalVisible(!this.state.accountModalVisible)} }>
+											<Button onPress={()=>this.setAccountModalVisible(false)}>
 												<Text style={{color: 'black'}}>Close</Text>
 											</Button>
 										</View>
 
 										<View style={[styles.submitAccountView]}>
-											<Button onPress={ this.updateProfile.bind(this) }>
+											<Button onPress={this.updateProfile}>
 												<Text style={{color: 'black'}}>Submit</Text>
 											</Button>
 										</View>			
@@ -346,13 +451,13 @@ class ChemistryApp extends Component {
 						<View style={[styles.accountButtons]}>
 
 							<View style={styles.myAccountButtonView}>
-								<Button onPress={ () => {this.setAccountModalVisible(true)} }>
+								<Button onPress={()=>this.setAccountModalVisible(true)}>
 									<Text style={{color: 'black'}}>My Account</Text>
 								</Button>
 							</View>
 
 							<View style={styles.logoutButtonView}>
-								<Button onPress={ this.logout.bind(this) }>
+								<Button onPress={this.logout}>
 									<Text>Log Out</Text>
 								</Button>
 							</View>
@@ -360,9 +465,9 @@ class ChemistryApp extends Component {
 						</View>
 					</View>
 
-				    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
+				    <ElementSelector elementsFound={this.state.elementsFound} newElement={this.getElement}/>
 
-				    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} total={this.state.total} newEdit={this.getEdit} />
+				    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multipliers} total={this.state.total} newEdit={this.getEdit} />
 
 				    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
 				</View>
@@ -370,90 +475,89 @@ class ChemistryApp extends Component {
 		}
 
 		//Else if no one is logged in
-		else {
-			return (
-				<View style={[styles.main]}>
-					<View>
-						<Modal
-							animationType={"none"} 
-							transparent={false}
-							visible={this.state.loginModalVisible}
-							onRequestClose={ () => {alert("Modal closed")} }
-						>
-							<View style={[styles.loginModalContent]}>
+		return (
+			<View style={[styles.main]}>
+				<View>
+					<Modal
+						animationType={"none"} 
+						transparent={false}
+						visible={this.state.loginModalVisible}
+						onRequestClose={ () => {alert("Modal closed")} }
+					>
+						<View style={[styles.loginModalContent]}>
 
-								<View style={[styles.loginModalHeading]}>
-									<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-									<Text style={[styles.loginModalText]}>Log in or create an account to save your molecules.</Text>
+							<View style={[styles.loginModalHeading]}>
+								<Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
+								<Text style={[styles.loginModalText]}>Log in or create an account to save your molecules.</Text>
+							</View>
+
+							<View style={styles.loginAuthFields}>
+								<View style={[styles.modalAuth, styles.modalEmail]}>
+									<Text style={{color:'black'}}>Email: </Text>
+									<TextInput style={[styles.loginTextInput]}
+										underlineColorAndroid={'white'}
+										autoFocus={true}
+										onChangeText={this.grabUserEmail}
+										//value={this.state.email}
+										placeholder={"Email Address"}
+									/>
 								</View>
 
-								<View style={styles.loginAuthFields}>
-									<View style={[styles.modalAuth, styles.modalEmail]}>
-										<Text style={{color:'black'}}>Email: </Text>
-										<TextInput style={[styles.loginTextInput]}
-											underlineColorAndroid={'white'}
-											autoFocus={true}
-											onChangeText={ (text) => this.setState({email: text}) }
-											value={this.state.email}
-											placeholder={"Email Address"}
-										/>
-									</View>
-
-									<View style={[styles.modalAuth, styles.modalPass]}>
-										<Text style={{color:'black'}}>Password: </Text>
-										<TextInput style={[styles.loginTextInput]}
-											onChangeText={ (text) => this.setState({password: text}) }
-											value={this.state.password}
-											secureTextEntry={true}
-											placeholder={"Password"}
-										/>
-									</View>
-								</View>
-
-								<View style={[styles.loginModalButtons]}>
-
-									<View style={[styles.signupView]}>
-										<Button onPress={this.signup.bind(this)}>
-											<Text style={{color:'black'}}>Sign Up</Text>
-										</Button>
-									</View>
-
-									<View style={[styles.loginView]}>
-										<Button onPress={this.login.bind(this)}>
-											<Text style={{color:'black'}}>Log In</Text>
-										</Button>
-									</View>
-
-									<View style={[styles.cancelLoginView]}>
-										<Button onPress={ ()=>{ this.setLoginModalVisible(!this.state.loginModalVisible)} }>
-											<Text style={{color:'black'}}>Close</Text>
-										</Button>
-									</View>
-
+								<View style={[styles.modalAuth, styles.modalPass]}>
+									<Text style={{color:'black'}}>Password: </Text>
+									<TextInput style={[styles.loginTextInput]}
+										onChangeText={this.grabUserPassword}
+										//value={this.state.password}
+										secureTextEntry={true}
+										placeholder={"Password"}
+									/>
 								</View>
 							</View>
-						</Modal>
-					</View>
 
-					<View style={[styles.header]}>
+							<View style={[styles.loginModalButtons]}>
 
-						<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
+								<View style={[styles.signupView]}>
+									<Button onPress={this.signup}>
+										<Text style={{color:'black'}}>Sign Up</Text>
+									</Button>
+								</View>
 
-						<View style={[styles.loginHeaderButton]}>
-							<Button onPress={ () => {this.setLoginModalVisible(true)} }>
-								<Text style={[styles.headerButtonText]}>Login/Sign Up</Text>
-							</Button>
+								<View style={[styles.loginView]}>
+									<Button onPress={this.login}>
+										<Text style={{color:'black'}}>Log In</Text>
+									</Button>
+								</View>
+
+								<View style={[styles.cancelLoginView]}>
+									<Button onPress={()=>this.setLoginModalVisible(false)}>
+										<Text style={{color:'black'}}>Close</Text>
+									</Button>
+								</View>
+
+							</View>
 						</View>
-					</View>
-
-				    <ElementSelector userInput={this.state.text} newElement={this.getElement}/>
-
-				    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multiplier} total={this.state.total} newEdit={this.getEdit} />
-
-				    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
+					</Modal>
 				</View>
-			)
-		}
+
+				<View style={[styles.header]}>
+
+					<Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
+
+					<View style={[styles.loginHeaderButton]}>
+						<Button onPress={()=>this.setLoginModalVisible(true)}>
+							<Text style={[styles.headerButtonText]}>Login/Sign Up</Text>
+						</Button>
+					</View>
+				</View>
+
+			    <ElementSelector elementsFound={this.state.elementsFound} newElement={this.getElement}/>
+
+			    <CalculatorPanel selectedElements={this.state.elements} elementMultipliers={this.state.multipliers} total={this.state.total} newEdit={this.getEdit} />
+
+			    <Keyboard newKeyPress={this.getKeypress} userInput={this.state.text}/>
+			</View>
+		)
+
 	}
 }
 
@@ -677,10 +781,6 @@ const styles = StyleSheet.create({
 		width: width*0.15,
 		marginLeft: width*0.165,
 	},
-
-
-
-
 });
 
 AppRegistry.registerComponent('MobileMolecularWeight', () => ChemistryApp);

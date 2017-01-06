@@ -13,73 +13,54 @@ var height = Dimensions.get('window').height;
 export default class KeyboardComponent extends Component {
 	constructor(props, context) {
 		super(props, context);
+
+    this.getKeyPress = this.getKeyPress.bind(this);
+    this.mapAllRows = this.mapAllRows.bind(this);
+
 	}
-	_handlePress(input) {
+	getKeyPress(input) {
 		this.props.newKeyPress(input)
 	}
+
+  mapAllRows(row){
+
+    return row.map((letter, i)=>{
+      return (
+        <Button
+          key={i}
+          style={[styles.button]}
+          onPress={()=>this.getKeyPress(letter.toLowerCase())}>
+
+          {letter.toUpperCase()}
+
+        </Button>
+      );
+    });
+
+  }
  
-render() {
+  render() {
+    const mapRow1 = this.mapAllRows(['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p']);
+    const mapRow2 = this.mapAllRows(['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l']);
+    const mapRow3 = this.mapAllRows(['z', 'x', 'c', 'v', 'b', 'n', 'm', '<-']);
 
-	var keyRow1 = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
-	var keyRow2 = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
-	var keyRow3 = ['z', 'x', 'c', 'v', 'b', 'n', 'm', '<-'];
+  	return (
+  		<View style={[styles.allRows]} >
 
+  			<View style={[styles.inputView]}>
+  				<Text style={[styles.inputText]}>{this.props.userInput.toUpperCase()}</Text>
+  			</View>
 
-	var mapRow1 = keyRow1.map(function(letter, i){
-    return (
-      <Button
-      	key={i}
-        style={[styles.button]}
-        onPress={() => this._handlePress(letter.toLowerCase())}>
-
-        {letter.toUpperCase()}
-
-      </Button>
-    );
-	}.bind(this));
-
-	var mapRow2 = keyRow2.map(function(letter, i){
-    return (
-      <Button
-      	key={i}
-        style={[styles.button]}
-        styleDisabled={{color: 'red'}}
-        onPress={() => this._handlePress(letter.toLowerCase())}>
-        {letter.toUpperCase()}
-      </Button>
-    );
-	}.bind(this));
-
-	var mapRow3 = keyRow3.map(function(letter, i){
-    return (
-      <Button
-      	key={i}
-        style={[styles.button]}
-        styleDisabled={{color: 'red'}}
-        onPress={() => this._handlePress(letter.toLowerCase())}>
-        {letter.toUpperCase()}
-      </Button>
-    );
-	}.bind(this));
+  			<View>
+  				<View style={[styles.row1]}>{mapRow1}</View>
+  				<View style={[styles.row2]}>{mapRow2}</View>
+  				<View style={[styles.row3]}>{mapRow3}</View>
+  			</View>
 
 
-	return (
-		<View style={[styles.allRows]} >
-
-			<View style={[styles.inputView]}>
-				<Text style={[styles.inputText]}>{this.props.userInput.toUpperCase()}</Text>
-			</View>
-
-			<View>
-				<View style={[styles.row1]}>{mapRow1}</View>
-				<View style={[styles.row2]}>{mapRow2}</View>
-				<View style={[styles.row3]}>{mapRow3}</View>
-			</View>
-
-
-		</View>
-	);
-}
+  		</View>
+  	);
+  }
 };
 
 const styles = StyleSheet.create({
