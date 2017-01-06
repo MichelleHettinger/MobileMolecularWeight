@@ -6,15 +6,15 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export default class ElementSelector extends Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
     //this.getElement = this.getElement.bind(this);
     this.displayElementsFound = this.displayElementsFound.bind(this);
-	}
-	getElement(input) {
-		this.props.newElement(input)
-	}
+  }
+  getElement(input) {
+    this.props.newElement(input)
+  }
 
   displayElementsFound(elementsFound){
     return elementsFound.map( (element, i) => {
@@ -31,65 +31,65 @@ export default class ElementSelector extends Component {
     })
   }
 
-	render(){
-		//Map through the array of elements found and display them
-		const elementsFound = this.displayElementsFound(this.props.elementsFound);
-		//Render the elementsFound 'div'
-		return (
-			<View style={styles.allElements}>
-		       {elementsFound}
+  render(){
+    //Map through the array of elements found and display them
+    const elementsFound = this.displayElementsFound(this.props.elementsFound);
+    //Render the elementsFound 'div'
+    return (
+      <View style={styles.allElements}>
+           {elementsFound}
       </View>
-		)
-	}
+    )
+  }
 }
 
 const styles = StyleSheet.create({
 
-	allElements: {
-		flexWrap: 'wrap',
-		flexDirection: 'row',
+  allElements: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
 
-		height: height*0.38,
-		width: width*0.96,
+    height: height*0.38,
+    width: width*0.96,
 
-		borderRadius: 4,
-		borderWidth: 1,
-		borderColor: 'black',
-	},
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
 
-	elementFont: {
-		color: "black",
-		fontFamily: "Helvetica",
+  elementFont: {
+    color: "black",
+    fontFamily: "Helvetica",
 
-	},
+  },
 
-	elementDiv:{
-		marginTop: height*0.005,
-		marginLeft: width*0.023,
+  elementDiv:{
+    marginTop: height*0.005,
+    marginLeft: width*0.023,
 
-		borderRadius: 4,
-		borderWidth: 1,
-		borderColor: 'black',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'black',
 
-		backgroundColor: '#499AB5FF',
+    backgroundColor: '#499AB5FF',
 
-	},
+  },
 
 
-	elementNumber: {
-		fontSize: height*0.011,
-		marginLeft: width*0.011,
-	},
-	elementAcronym: {
-		textAlign: "center",
-		fontSize: height*0.03,
-	},
-	elementName: {
-		textAlign: "center",
-		fontSize: height*0.019,
-	},
-	elementMass: {
-		textAlign: "center",
-		fontSize: height*0.018,
-	}
+  elementNumber: {
+    fontSize: height*0.011,
+    marginLeft: width*0.011,
+  },
+  elementAcronym: {
+    textAlign: "center",
+    fontSize: height*0.03,
+  },
+  elementName: {
+    textAlign: "center",
+    fontSize: height*0.019,
+  },
+  elementMass: {
+    textAlign: "center",
+    fontSize: height*0.018,
+  }
 });
