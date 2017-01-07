@@ -579,7 +579,7 @@ class ChemistryApp extends Component {
   keyboardRend(){
     return (
       <Keyboard
-        newKeyPress={this.getKeypress}
+        getKeyPress={this.getKeypress}
         userInput={this.state.text}
       />
     )
@@ -588,18 +588,18 @@ class ChemistryApp extends Component {
     return (
       <ElementSelector
         elementsFound={this.state.elementsFound}
-        newElement={this.getElement}
+        getElement={this.getElement}
       />
     )
   }
   calcPanelRend(){
     return (
       <CalculatorPanel
-        user={this.state.user}
+        logged={this.state.logged}
         selectedElements={this.state.elements}
         elementMultipliers={this.state.multipliers}
         total={this.state.total}
-        newEdit={this.getEdit}
+        getPlusMinus={this.getEdit}
       />
     )
   }

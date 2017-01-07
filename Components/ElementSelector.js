@@ -12,14 +12,11 @@ export default class ElementSelector extends Component {
     //this.getElement = this.getElement.bind(this);
     this.displayElementsFound = this.displayElementsFound.bind(this);
   }
-  getElement(input) {
-    this.props.newElement(input)
-  }
 
   displayElementsFound(elementsFound){
     return elementsFound.map( (element, i) => {
       return (
-        <Button containerStyle={{width: width*0.232, height:width*0.22}} key={i} onPress={()=>this.getElement(element)}>
+        <Button containerStyle={{width: width*0.232, height:width*0.22}} key={i} onPress={()=>this.props.getElement(element)}>
           <View style={styles.elementDiv} key={i}>
             <Text style={[styles.elementNumber, styles.elementFont]} key={i}>{element.atomicNumber}</Text>
             <Text style={[styles.elementAcronym, styles.elementFont]}>{element.elementAcronym}</Text>

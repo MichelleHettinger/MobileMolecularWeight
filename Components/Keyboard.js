@@ -11,30 +11,22 @@ export default class KeyboardComponent extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.getKeyPress = this.getKeyPress.bind(this);
     this.mapAllRows = this.mapAllRows.bind(this);
-
-  }
-  getKeyPress(input) {
-    //Goes to index.android.js
-    this.props.newKeyPress(input)
   }
 
   mapAllRows(row){
-
     return row.map((letter, i)=>{
       return (
         <Button
           key={i}
           style={[styles.button]}
-          onPress={()=>this.getKeyPress(letter.toLowerCase())}>
+          onPress={()=>this.props.getKeyPress(letter.toLowerCase())}>
 
           {letter.toUpperCase()}
 
         </Button>
       );
     });
-
   }
  
   render() {
