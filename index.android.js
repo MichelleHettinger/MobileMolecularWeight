@@ -101,6 +101,7 @@ class ChemistryApp extends Component {
     });
   }
   setLoginModalVisible(visible){
+    
     this.setState({loginModalVisible: visible});
   }
   login(){
