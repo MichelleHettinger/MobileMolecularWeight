@@ -78,7 +78,11 @@ class ChemistryApp extends Component {
     //Keyboard and element selector components
     this.keyboardRend = this.keyboardRend.bind(this);
     this.elemSelectorRend = this.elemSelectorRend.bind(this);
+
     this.calcPanelRend = this.calcPanelRend.bind(this);
+    this.updateMainState = this.updateMainState.bind(this);
+    this.updateDeleted = this.updateDeleted.bind(this);
+    this.updateSavedCompounds = this.updateSavedCompounds.bind(this);
   }
 
   //LoginModal methods
@@ -97,7 +101,6 @@ class ChemistryApp extends Component {
     });
   }
   setLoginModalVisible(visible){
-
     this.setState({loginModalVisible: visible});
   }
   login(){
@@ -117,6 +120,9 @@ class ChemistryApp extends Component {
           //Grab 'snapshot' of the users saved compounds.
           const allCompounds = snapshot.val();
 
+          //console.log(allCompounds)
+
+
           this.setState({
             user:user,
             userSavedCompounds: allCompounds,
@@ -126,8 +132,6 @@ class ChemistryApp extends Component {
         });
       }
     });
-
-
   }
   signup(){
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
@@ -140,7 +144,7 @@ class ChemistryApp extends Component {
 
     }).then((newUserData) => {
 
-      console.log(newUserData);
+      //console.log(newUserData);
       this.setLoginModalVisible(false);
 
  
@@ -180,7 +184,7 @@ class ChemistryApp extends Component {
 
       }).then((result)=>{
         // Update successful.
-        console.log("Email Updated")
+        //console.log("Email Updated")
 
         this.setState({newEmail: ''})
 
@@ -198,7 +202,7 @@ class ChemistryApp extends Component {
 
       }).then((result)=>{
         // Update successful.
-        console.log("Name Updated")
+        //console.log("Name Updated")
 
         this.setState({newUsername: ''})
       })
@@ -212,8 +216,8 @@ class ChemistryApp extends Component {
 
     }).then((result)=>{
       // Update successful.
-      console.log("Email sent!")
-      console.log(result);
+      //console.log("Email sent!")
+      //console.log(result);
 
     })
   }
@@ -330,10 +334,10 @@ class ChemistryApp extends Component {
     //console.log(this.state);
   }
   getEdit(input, element, i){
-    console.log("------------------------------------------");
-    console.log(input + " one " + element.elementName + " at position: " + i);
+    //console.log("------------------------------------------");
+    //console.log(input + " one " + element.elementName + " at position: " + i);
 
-    console.log(i)
+    //console.log(i)
 
     if (input == '+'){
       this.state.multipliers[i] += 1;
@@ -357,13 +361,13 @@ class ChemistryApp extends Component {
       multiplier: this.state.multipliers
     })
 
-    console.log(this.state);
+    //console.log(this.state);
   }
 
   //Methods for header when logged in
   loggedHeader(){
 
-    console.log(this.state.user)
+    //console.log(this.state.user)
 
     //Keep this conditional
     if (this.state.logged){
@@ -381,9 +385,7 @@ class ChemistryApp extends Component {
                   <Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
                   <Text style={[styles.accountModalText, {marginLeft: width*0.09}]}>Thank you for using Mobile Molecular Weight!</Text>
                 </View>
-
                 <View style={[styles.accountModalContent]}>
-
                   <View >
                     <View style={styles.accountAuthFields}>
                       <View style={[styles.modalAuth, styles.accountUsername]}>
@@ -394,7 +396,6 @@ class ChemistryApp extends Component {
                           placeholder={this.state.user.displayName}
                         />
                       </View>
-
                       <View style={[styles.modalAuth, styles.accountEmail]}>
                         <Text style={{color:'black'}}>Email: </Text>
                         <TextInput style={[styles.accountTextInput,  {marginLeft: width*0.1}]}
@@ -404,9 +405,7 @@ class ChemistryApp extends Component {
                         />
                       </View>
                     </View>
-
                     <View style={styles.accountAuthFields}>
-
                       <View style={[styles.modalAuth, styles.newUsername]}>
                         <Text style={{color:'black'}}>New Name: </Text>
                         <TextInput style={[styles.accountTextInput, {marginLeft: width*0.007}]}
@@ -415,7 +414,6 @@ class ChemistryApp extends Component {
                           placeholder={"Alias"}
                         />
                       </View>
-
                       <View style={[styles.modalAuth, styles.newEmail]}>
                         <Text style={{color:'black'}}>New Email: </Text>
                         <TextInput style={[styles.accountTextInput, {marginLeft: width*0.008}]}
@@ -426,32 +424,25 @@ class ChemistryApp extends Component {
                       </View>
                     </View>
                   </View>
-
-
                   <View style={[styles.resetPasswordView]}>
                     <Button onPress={ this.resetPassword }>
                       <Text style={{color: 'black', textAlign: 'center'}}>Reset Password?</Text>
                     </Button>
                   </View>
-
                   <View style={styles.accountModalButtons}>
                     <View style={[styles.cancelAccountView]}>
                       <Button onPress={()=>this.setAccountModalVisible(false)}>
                         <Text style={{color: 'black'}}>Close</Text>
                       </Button>
                     </View>
-
                     <View style={[styles.submitAccountView]}>
                       <Button onPress={this.updateProfile}>
                         <Text style={{color: 'black'}}>Submit</Text>
                       </Button>
                     </View>     
                   </View>
-
                 </View>
-
               </View>
-
             </Modal>
           </View>
 
@@ -504,13 +495,13 @@ class ChemistryApp extends Component {
             animationType={"none"} 
             transparent={false}
             visible={this.state.loginModalVisible}
-            onRequestClose={ () => {alert("Modal closed")} }
+            onRequestClose={()=>this.setLoginModalVisible(false)}
           >
             <View style={[styles.loginModalContent]}>
 
               <View style={[styles.loginModalHeading]}>
                 <Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-                <Text style={[styles.loginModalText]}>Log in or create an account to save your molecules.</Text>
+                <Text style={[{color:'black', textAlign:'center'}]}>Log in or create an account to save your molecules.</Text>
               </View>
 
               <View style={styles.loginAuthFields}>
@@ -520,7 +511,6 @@ class ChemistryApp extends Component {
                     underlineColorAndroid={'white'}
                     autoFocus={true}
                     onChangeText={this.grabUserEmail}
-                    //value={this.state.email}
                     placeholder={"Email Address"}
                   />
                 </View>
@@ -529,7 +519,6 @@ class ChemistryApp extends Component {
                   <Text style={{color:'black'}}>Password: </Text>
                   <TextInput style={[styles.loginTextInput]}
                     onChangeText={this.grabUserPassword}
-                    //value={this.state.password}
                     secureTextEntry={true}
                     placeholder={"Password"}
                   />
@@ -567,7 +556,7 @@ class ChemistryApp extends Component {
 
           <View style={[styles.loginHeaderButton]}>
             <Button onPress={()=>this.setLoginModalVisible(true)}>
-              <Text style={[styles.headerButtonText]}>Login/Sign Up</Text>
+              <Text style={[{color:'black',textAlign:'center'}]}>Login/Sign Up</Text>
             </Button>
           </View>
         </View>
@@ -592,16 +581,58 @@ class ChemistryApp extends Component {
       />
     )
   }
+
+  //Calc panel methods
   calcPanelRend(){
     return (
       <CalculatorPanel
-        logged={this.state.logged}
-        selectedElements={this.state.elements}
-        elementMultipliers={this.state.multipliers}
-        total={this.state.total}
+        mainState={this.state}
         getPlusMinus={this.getEdit}
+        updateMainState={this.updateMainState}
+        updateDeleted={this.updateDeleted}
+        updateSaved={this.updateSavedCompounds}
       />
     )
+  }
+  updateMainState(compoundX){
+    //console.log(compoundX);
+    //console.log(this.state.userSavedCompounds);
+
+    const newElements = this.state.userSavedCompounds[compoundX].elements;
+    const newMultipliers = this.state.userSavedCompounds[compoundX].multipliers;
+    const newTotal = parseFloat(this.state.userSavedCompounds[compoundX].total);
+
+    this.setState({
+      elements: newElements,
+      multipliers: newMultipliers,
+      total: newTotal,
+    })
+  }
+  updateDeleted(compoundX){
+
+    const userID = this.state.user.uid;
+
+    firebase.database().ref('users/' + userID + '/compounds/' + compoundX).set({null}, () => {
+      //console.log('Wrote to database');
+      //$("#outerSavedDiv").empty();
+
+      firebase.database().ref('users/' + userID + '/compounds').once('value').then( snapshot => {
+        //Grab 'snapshot' of the users saved compounds.
+        const allCompounds = snapshot.val();
+
+        //console.log(allCompounds);
+
+        this.setState({
+          userSavedCompounds: allCompounds,
+        });
+
+      });
+    });
+  }
+  updateSavedCompounds (allCompounds) {
+    this.setState({
+      userSavedCompounds: allCompounds
+    });
   }
 
   render() {
@@ -637,6 +668,11 @@ class ChemistryApp extends Component {
 }
 
 const styles = StyleSheet.create({
+  border: {
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
 
   //  Account Modal //
   accountModalContent: {
@@ -736,10 +772,6 @@ const styles = StyleSheet.create({
     fontSize: height*0.045,
     color: 'black',
   },
-  loginModalText: {
-    color: 'black',
-    marginLeft: width*0.06,
-  },
 
   //View tag for login/signup button
   loginHeaderButton: {
@@ -769,7 +801,7 @@ const styles = StyleSheet.create({
 
   //View tag for each auth input element
   loginAuthFields: {
-  marginLeft: width*0.15,
+  marginLeft: width*0.1,
   marginBottom: height*0.01,
   },
   modalAuth: {
