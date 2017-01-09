@@ -378,64 +378,70 @@ class ChemistryApp extends Component {
               animationType={"none"} 
               transparent={false}
               visible={this.state.accountModalVisible}
-              onRequestClose={ () => {alert("Modal closed")} }
+              onRequestClose={()=>this.setAccountModalVisible(false)}
             >
               <View>
-                <View style={[styles.accountModalHeading]}>
-                  <Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-                  <Text style={[styles.accountModalText, {marginLeft: width*0.09}]}>Thank you for using Mobile Molecular Weight!</Text>
+                <View style={[styles.border,{marginBottom:height*0.01}]}>
+                  <Text style={[styles.centerBlack,{fontSize:height*0.045}]}>Mobile Molecular Weight</Text>
+                  <Text style={[styles.centerBlack]}>Thank you for using Mobile Molecular Weight!</Text>
                 </View>
-                <View style={[styles.accountModalContent]}>
+                <View style={[{marginTop:height*0.01,marginLeft:width*0.1}]}>
                   <View >
-                    <View style={styles.accountAuthFields}>
-                      <View style={[styles.modalAuth, styles.accountUsername]}>
-                        <Text style={{color:'black'}}>Username: </Text>
-                        <TextInput style={[styles.accountTextInput, {marginLeft: width*0.01}]}
-                          editable={false}
-                          underlineColorAndroid={'white'}
-                          placeholder={this.state.user.displayName}
-                        />
+                    <View style={[{height: height*0.055}, styles.flexRow]}>
+                      <View style={[{width:width*0.3,height:height*0.1}]}>
+                        <Text style={{color:'black',textAlign:'right'}}>Email:</Text>
                       </View>
-                      <View style={[styles.modalAuth, styles.accountEmail]}>
-                        <Text style={{color:'black'}}>Email: </Text>
-                        <TextInput style={[styles.accountTextInput,  {marginLeft: width*0.1}]}
-                          underlineColorAndroid={'white'}
-                          editable={false}
-                          placeholder={this.state.user.email}
-                        />
-                      </View>
+                      <TextInput style={[{height:height*0.09,width:width*0.5,marginTop:-18}]}
+                        underlineColorAndroid={'white'}
+                        editable={false}
+                        placeholder={this.state.user.email}
+                      />
                     </View>
-                    <View style={styles.accountAuthFields}>
-                      <View style={[styles.modalAuth, styles.newUsername]}>
-                        <Text style={{color:'black'}}>New Name: </Text>
-                        <TextInput style={[styles.accountTextInput, {marginLeft: width*0.007}]}
-                          onChangeText={this.grabNewUserName}
-                          value={this.state.newUsername}
-                          placeholder={"Alias"}
-                        />
+                    <View style={[{height: height*0.055}, styles.flexRow]}>
+                      <View style={[{width:width*0.3,height:height*0.1}]}>
+                        <Text style={{color:'black',textAlign:'right'}}>Username:</Text>
                       </View>
-                      <View style={[styles.modalAuth, styles.newEmail]}>
-                        <Text style={{color:'black'}}>New Email: </Text>
-                        <TextInput style={[styles.accountTextInput, {marginLeft: width*0.008}]}
-                          onChangeText={this.grabNewEmail}
-                          value={this.state.newEmail}
-                          placeholder={"Email Address"}
-                        />
+                      <TextInput style={[{height:height*0.09,width:width*0.5,marginTop:-18}]}
+                        editable={false}
+                        underlineColorAndroid={'white'}
+                        placeholder={this.state.user.displayName}
+                      />
+                    </View>
+                    <View style={[{height: height*0.055}, styles.flexRow]}>
+                      <View style={[{width:width*0.3,height:height*0.1}]}>
+                        <Text style={{color:'black',textAlign:'right'}}>New Name:</Text>
                       </View>
+                      <TextInput style={[{height:height*0.09,width:width*0.5,marginTop:-18}]}
+                        onChangeText={this.grabNewUserName}
+                        value={this.state.newUsername}
+                        placeholder={"Alias"}
+                      />
+                    </View>
+                    <View style={[{height: height*0.055}, styles.flexRow]}>
+                      <View style={[{width:width*0.3,height:height*0.1}]}>
+                        <Text style={{color:'black',textAlign:'right'}}>New Email:</Text>
+                      </View>
+                      <TextInput style={[{height:height*0.09,width:width*0.5,marginTop:-18}]}
+                        onChangeText={this.grabNewEmail}
+                        value={this.state.newEmail}
+                        placeholder={"Email Address"}
+                      />
                     </View>
                   </View>
-                  <View style={[styles.resetPasswordView]}>
+                </View>
+                <View>
+                  <View style={[styles.border,{width:width*0.35,marginLeft:width*0.31,marginBottom:height*0.05}]}>
                     <Button onPress={ this.resetPassword }>
-                      <Text style={{color: 'black', textAlign: 'center'}}>Reset Password?</Text>
+                      <Text style={[styles.centerBlack]}>Reset Password?</Text>
                     </Button>
                   </View>
-                  <View style={styles.accountModalButtons}>
-                    <View style={[styles.cancelAccountView]}>
+                  <View style={[styles.flexRow,{height:height*0.04,width:width*0.35,marginLeft:width*0.32}]}>
+                    <View style={[{width: width*0.11,marginRight: width*0.045}]}>
                       <Button onPress={()=>this.setAccountModalVisible(false)}>
                         <Text style={{color: 'black'}}>Close</Text>
                       </Button>
                     </View>
-                    <View style={[styles.submitAccountView]}>
+                    <View style={[{width:width*0.13,marginLeft:width*0.045}]}>
                       <Button onPress={this.updateProfile}>
                         <Text style={{color: 'black'}}>Submit</Text>
                       </Button>
@@ -445,25 +451,19 @@ class ChemistryApp extends Component {
               </View>
             </Modal>
           </View>
-
-          <View style={[styles.header]}>
-
-            <Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
-
-            <View style={[styles.accountButtons]}>
-
-              <View style={styles.myAccountButtonView}>
+          <View style={[styles.border,styles.header]}>
+            <Text style={[styles.centerBlack,{fontSize:width*0.05}]}>Mobile Molecular Weight</Text>
+            <View style={[styles.flexRow,{height:height*0.05}]}>
+              <View style={[{width:width*0.23,marginLeft:width*0.375}]}>
                 <Button onPress={()=>this.setAccountModalVisible(true)}>
-                  <Text style={{color: 'black'}}>My Account</Text>
+                  <Text style={{color:'black'}}>My Account</Text>
                 </Button>
               </View>
-
-              <View style={styles.logoutButtonView}>
+              <View style={[{width:width*0.15,marginLeft:width*0.165}]}>
                 <Button onPress={this.logout}>
                   <Text>Log Out</Text>
                 </Button>
               </View>
-
             </View>
           </View>
         </View>
@@ -497,16 +497,14 @@ class ChemistryApp extends Component {
             visible={this.state.loginModalVisible}
             onRequestClose={()=>this.setLoginModalVisible(false)}
           >
-            <View style={[styles.loginModalContent]}>
-
-              <View style={[styles.loginModalHeading]}>
-                <Text style={[styles.modalTitle]}>Mobile Molecular Weight</Text>
-                <Text style={[{color:'black', textAlign:'center'}]}>Log in or create an account to save your molecules.</Text>
+            <View style={[{marginTop:height*0.01,marginLeft:0}]}>
+              <View style={[styles.border,{marginBottom:height*0.05}]}>
+                <Text style={[styles.centerBlack,{fontSize:height*0.045}]}>Mobile Molecular Weight</Text>
+                <Text style={[styles.centerBlack]}>Log in or create an account to save your molecules.</Text>
               </View>
-
-              <View style={styles.loginAuthFields}>
-                <View style={[styles.modalAuth, styles.modalEmail]}>
-                  <Text style={{color:'black'}}>Email: </Text>
+              <View style={[{marginLeft:width*0.1,marginBottom:height*0.01}]}>
+                <View style={[styles.flexRow,{marginLeft:width*0.16,width:width*0.85,height:height*0.055}]}>
+                  <Text style={{color:'black'}}>Email:</Text>
                   <TextInput style={[styles.loginTextInput]}
                     underlineColorAndroid={'white'}
                     autoFocus={true}
@@ -514,9 +512,8 @@ class ChemistryApp extends Component {
                     placeholder={"Email Address"}
                   />
                 </View>
-
-                <View style={[styles.modalAuth, styles.modalPass]}>
-                  <Text style={{color:'black'}}>Password: </Text>
+                <View style={[styles.flexRow,{marginLeft:width*0.089,width:width*0.85,height:height*0.055}]}>
+                  <Text style={{color:'black'}}>Password:</Text>
                   <TextInput style={[styles.loginTextInput]}
                     onChangeText={this.grabUserPassword}
                     secureTextEntry={true}
@@ -524,39 +521,26 @@ class ChemistryApp extends Component {
                   />
                 </View>
               </View>
-
-              <View style={[styles.loginModalButtons]}>
-
-                <View style={[styles.signupView]}>
+              <View style={[styles.flexRow,{width:width*0.3,height:height*0.04,marginLeft:width*0.33}]}>
+                <View style={[{marginRight:width*0.03}]}>
                   <Button onPress={this.signup}>
                     <Text style={{color:'black'}}>Sign Up</Text>
                   </Button>
                 </View>
-
-                <View style={[styles.loginView]}>
+                <View style={[]}>
                   <Button onPress={this.login}>
                     <Text style={{color:'black'}}>Log In</Text>
                   </Button>
                 </View>
-
-                <View style={[styles.cancelLoginView]}>
-                  <Button onPress={()=>this.setLoginModalVisible(false)}>
-                    <Text style={{color:'black'}}>Close</Text>
-                  </Button>
-                </View>
-
               </View>
             </View>
           </Modal>
         </View>
-
-        <View style={[styles.header]}>
-
-          <Text style={[styles.headerTitle]}>Mobile Molecular Weight</Text>
-
-          <View style={[styles.loginHeaderButton]}>
+        <View style={[styles.border,styles.header]}>
+          <Text style={[styles.centerBlack,{fontSize:height*0.03}]}>Mobile Molecular Weight</Text>
+          <View style={[{width:width*0.25,marginLeft:width*0.35}]}>
             <Button onPress={()=>this.setLoginModalVisible(true)}>
-              <Text style={[{color:'black',textAlign:'center'}]}>Login/Sign Up</Text>
+              <Text style={[styles.centerBlack]}>Login/Sign Up</Text>
             </Button>
           </View>
         </View>
@@ -673,209 +657,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
   },
-
-  //  Account Modal //
-  accountModalContent: {
-    marginTop: height*0.01,
-    marginLeft: 0,
-  },
-  accountModalHeading: {
-    marginBottom: height*0.01,
-
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-  accountModalText: {
-    color: 'black',
-    marginLeft: width*0.06,
-  },
-  accountTextInput: {
-    width: width*0.6,
-    height: height*0.09,
-    marginBottom: 0,
-
-    top: -1*height*0.03,
-  },
-  accountAuthFields: {
-   marginLeft: width*0.12,
-   marginBottom: height*0.01,
-   width: width*0.7,
-  },
-  accountEmail: {
-    marginLeft:0,
-  },
-  accountUsername:{
-    marginBottom: 0,
-  },
-  newEmail: {
-    marginLeft: 0,
-  },
-  newusername: {
-
-  },
-  accountModalButtons: {
+  flexRow: {
     flexWrap: 'wrap',
     flexDirection: 'row',
-
-    height: height*0.04,
-    width: width*0.35,
-    marginLeft: width*0.32,
   },
-  submitAccountView: {
-    width: width*0.13,
-    marginLeft: width*0.045,
+  centerBlack:{
+    textAlign: 'center',
+    color: 'black',
   },
-  cancelAccountView: {
-    width: width*0.11,
-    marginRight: width*0.045,
-  },
-  resetPasswordView: {
-    width: width*0.35,
-    marginLeft: width*0.31,
-    marginBottom: height*0.05,
-
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-
-
-
   main: {
     marginTop: height*0.01,
     marginLeft: width*0.02,
   },
-
-  //Both headers
   header: {
-  width: width*0.96,
-  height: height*0.08,
-
-  borderRadius: 4,
-  borderWidth: 1,
-  borderColor: 'black',
+    width: width*0.96,
+    height: height*0.08,
   },
-  headerTitle: {
-    textAlign: 'center',
-    color: 'black',
-    fontSize: width*0.05,
-  },
-  headerButtonText: {
-    textAlign: 'center',
-    fontSize: height*0.02
-  },
-
-  //Both modals
-  modalTitle: {
-    textAlign: 'center',
-    fontSize: height*0.045,
-    color: 'black',
-  },
-
-  //View tag for login/signup button
-  loginHeaderButton: {
-    width: width*0.25,
-    marginLeft: width*0.35,
-  },
-
-  //View tag for everything in the login modal
-  loginModalContent: {
-    marginTop: height*0.01,
-    marginLeft: 0,
-
-
-  // borderRadius: 4,
-  // borderWidth: 1,
-  // borderColor: 'black',
-  },
-
-  //View for the heading with login/signup button
-  loginModalHeading: {
-    marginBottom: height*0.05,
-
-  borderRadius: 4,
-  borderWidth: 1,
-  borderColor: 'black',
-  },
-
-  //View tag for each auth input element
-  loginAuthFields: {
-  marginLeft: width*0.1,
-  marginBottom: height*0.01,
-  },
-  modalAuth: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-
-  width: width*0.85,
-  height: height*0.055,
-
-  },
-
-  //The view tags for input field
-  modalEmail: {
-    marginLeft: width*0.16,
-  },
-  modalPass: {
-    marginLeft: width*0.089,
-  },
-
-  //Text box
   loginTextInput: {
     width: width*0.6,
     height: height*0.09,
     marginBottom: 0,
-
     top: -1*height*0.03,
-
-  // borderRadius: 4,
-  // borderWidth: 1,
-  // borderColor: 'black',
-  },
-
-  //Log in
-  loginModalButtons:{
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-
-    width: width*0.3,
-    height: height*0.05,
-    marginLeft: width*0.33,
-
-
-  // borderRadius: 4,
-  // borderWidth: 1,
-  // borderColor: 'black',
-
-  },
-
-  //View tags for the buttons
-  loginView: {
-
-  },
-  cancelLoginView: {
-    marginLeft: width*0.08,
-  },
-  signupView:{
-    marginRight: width*0.03,
-  },
-
-
-  //View tag for logged in header buttons
-  accountButtons: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-
-    height: height*0.05,
-  },
-  myAccountButtonView: {
-    width: width*0.23,
-    marginLeft: width*0.375,
-  },
-  logoutButtonView: {
-    width: width*0.15,
-    marginLeft: width*0.165,
   },
 });
 
