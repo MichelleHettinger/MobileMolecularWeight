@@ -33,18 +33,13 @@ class ChemistryApp extends Component {
       elementsFound: [],
       elements: [], multipliers:[],
       total: 0,
-
       email: '',
       password: '',
-
       newEmail: '',
       newUsername: '',
-
       user: {},
       userSavedCompounds: {},
-
       logged: false,
-      
       loginModalVisible: false,
       accountModalVisible: false,
     };
@@ -54,31 +49,26 @@ class ChemistryApp extends Component {
     this.grabUserPassword = this.grabUserPassword.bind(this);
     this.login = this.login.bind(this);
     this.signup = this.signup.bind(this);
-
     //MyAccountModal methods
     this.grabNewEmail = this.grabNewEmail.bind(this);
     this.grabNewUserName = this.grabNewUserName.bind(this);
     this.grabNewPassword = this.grabNewPassword.bind(this);
     this.updateProfile = this.updateProfile.bind(this);
     this.resetPassword = this.resetPassword.bind(this);
-
     //Methods getting data from other components
     this.getKeypress = this.getKeypress.bind(this);
     this.findElements = this.findElements.bind(this);
     this.getElement = this.getElement.bind(this);
     this.getEdit = this.getEdit.bind(this);
-
     //Methods for header when logged in
     this.loggedHeader = this.loggedHeader.bind(this);
     this.logout = this.logout.bind(this);
-
     //Methods for header when not logged in
     this.notLoggedHeader = this.notLoggedHeader.bind(this);
-
-    //Keyboard and element selector components
+    //Keyboard and element selector methods
     this.keyboardRend = this.keyboardRend.bind(this);
     this.elemSelectorRend = this.elemSelectorRend.bind(this);
-
+    //Calc panel methods
     this.calcPanelRend = this.calcPanelRend.bind(this);
     this.updateMainState = this.updateMainState.bind(this);
     this.updateDeleted = this.updateDeleted.bind(this);
@@ -88,14 +78,12 @@ class ChemistryApp extends Component {
   //LoginModal methods
   grabUserEmail(userEmail){
     //console.log(userEmail)
-
     this.setState({
       email: userEmail,
     });
   }
   grabUserPassword(userPassword){
     //console.log(userPassword)
-
     this.setState({
       password: userPassword,
     });
@@ -106,7 +94,6 @@ class ChemistryApp extends Component {
   }
   login(){
     //Login and then get the users saved data.
-
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(error => {
       // Handle Errors here.
       const errorCode = error.code;
@@ -117,13 +104,9 @@ class ChemistryApp extends Component {
       //console.log(user);
       if(user){
         firebase.database().ref('users/' + user.uid + '/compounds').once('value').then( snapshot => {
-
           //Grab 'snapshot' of the users saved compounds.
           const allCompounds = snapshot.val();
-
           //console.log(allCompounds)
-
-
           this.setState({
             user:user,
             userSavedCompounds: allCompounds,
@@ -139,19 +122,13 @@ class ChemistryApp extends Component {
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
-      // ...
-
       alert("Error " + errorCode + ". " + errorMessage)
 
     }).then((newUserData) => {
-
       //console.log(newUserData);
       this.setLoginModalVisible(false);
-
- 
     });
   }
-
   //MyAccountModal methods
   grabNewEmail(newEmail){
     this.setState({
@@ -173,8 +150,6 @@ class ChemistryApp extends Component {
     this.setState({accountModalVisible: visible})
   }
   updateProfile(){
-    //This is where the submit button goes
-    
     //Listener for firebase user login
     const user = firebase.auth().currentUser;
 
@@ -186,17 +161,13 @@ class ChemistryApp extends Component {
       }).then((result)=>{
         // Update successful.
         //console.log("Email Updated")
-
         this.setState({newEmail: ''})
-
       })
     }
 
     if (this.state.newUsername.length > 0){
       user.updateProfile({
-
         displayName: this.state.newUsername,
-
       }).catch(function(error){
         //Error hapened
         alert("Update error. " + error);
@@ -204,13 +175,11 @@ class ChemistryApp extends Component {
       }).then((result)=>{
         // Update successful.
         //console.log("Name Updated")
-
         this.setState({newUsername: ''})
       })
     }
   }
   resetPassword(){
-
     auth.sendPasswordResetEmail(this.state.email).catch(function(error){
       //Error hapened
       alert("Update error. " + error);
@@ -219,10 +188,8 @@ class ChemistryApp extends Component {
       // Update successful.
       //console.log("Email sent!")
       //console.log(result);
-
     })
   }
-
   //Methods getting data from other components
   getKeypress(newText){
     //console.log("------------------------------------------");
@@ -240,19 +207,15 @@ class ChemistryApp extends Component {
     this.setState({
       text: totalText,
     }, () => {this.findElements(totalText)} )
-
     //console.log(this.state)
   }
   findElements (userInput) {
     //Find the right elements, then setState for found elements.
-
     let listElements = [];
     let listElements2 = [];
     let listElements3 = [];
-
     // Loop through every typed letter
     for (let i=0; i<userInput.length; i++){
-
       if (i==0){
         //Loop through all elements
         for (let j=0; j<ElementsArray.length;j++){
@@ -262,7 +225,6 @@ class ChemistryApp extends Component {
           } 
         }         
       }
-
       else if (i==1){
         //Loop through the first list of elements
         for (let j=0; j<listElements.length;j++){
@@ -272,7 +234,6 @@ class ChemistryApp extends Component {
           } 
         }
       }
-
       else if (i==2){
         //Loop through the second list of elements
         for (let j=0; j<listElements2.length;j++){
@@ -283,7 +244,6 @@ class ChemistryApp extends Component {
         }
       }   
     }
-
     //Depending on how many letters were typed in, display the appropriate array
     if (userInput.length == 0){
       this.setState({
@@ -331,45 +291,73 @@ class ChemistryApp extends Component {
       elements: currentElements,
       multiplier: currentMultipliers
     });
-
     //console.log(this.state);
   }
   getEdit(input, element, i){
+    //console.log(this.state)
     //console.log("------------------------------------------");
     //console.log(input + " one " + element.elementName + " at position: " + i);
-
-    //console.log(i)
+    let elements = this.state.elements;
+    let multipliers = this.state.multipliers;
+    let total = this.state.total;
 
     if (input == '+'){
-      this.state.multipliers[i] += 1;
-      this.state.total += element.mass;
-    }
-    else if (input == '-'){
-      this.state.multipliers[i] -= 1;
-      this.state.total -= element.mass;
-    }
+      multipliers[i] += 1;
+      total += element.mass;
 
-    for (let j=0; j<this.state.multipliers.length; j++){
-      if (this.state.multipliers[j] == 0){
-        this.state.multipliers.splice(j, 1);
-        this.state.elements.splice(j, 1);
+      for (let j=0; j<multipliers.length; j++){
+        if (multipliers[j] == 0){
+          multipliers.splice(j, 1);
+          elements.splice(j, 1);
+        }
+
+        this.setState({
+          total: total,
+          elements: elements,
+          multiplier: multipliers
+        },() => {
+          firebase.database().ref('users/' + this.state.user.uid + '/compounds').once('value').then( snapshot => {
+            //Grab 'snapshot' of the users saved compounds.
+            const allCompounds = snapshot.val();
+            //console.log(allCompounds);
+            this.setState({
+              userSavedCompounds: allCompounds,
+            });
+          });
+        })
       }
     }
-
-    this.setState({
-      total: this.state.total,
-      elements: this.state.elements,
-      multiplier: this.state.multipliers
-    })
-
-    //console.log(this.state);
+    else if (input == '-'){
+      multipliers[i] -= 1;
+      total -= element.mass;
+      if (total < 0){
+        total = 0;
+      }
+      for (let j=0; j<multipliers.length; j++){
+        if (multipliers[j] == 0){
+          multipliers.splice(j, 1);
+          elements.splice(j, 1);
+        }
+        this.setState({
+          total: total,
+          elements: elements,
+          multiplier: multipliers
+        },() => {
+          firebase.database().ref('users/' + this.state.user.uid + '/compounds').once('value').then( snapshot => {
+            //Grab 'snapshot' of the users saved compounds.
+            const allCompounds = snapshot.val();
+            //console.log(allCompounds);
+            this.setState({
+              userSavedCompounds: allCompounds,
+            });
+          });
+        })
+      }
+    }
   }
-
   //Methods for header when logged in
   loggedHeader(){
-
     //console.log(this.state.user)
-
     //Keep this conditional
     if (this.state.logged){
       return(
@@ -486,7 +474,6 @@ class ChemistryApp extends Component {
 
     }.bind(this))
   }
-
   //Methods for header when not logged in
   notLoggedHeader(){
     return(
@@ -548,7 +535,6 @@ class ChemistryApp extends Component {
       </View>
     )
   }
-
   //Keyboard and element selector components
   keyboardRend(){
     return (
@@ -566,7 +552,6 @@ class ChemistryApp extends Component {
       />
     )
   }
-
   //Calc panel methods
   calcPanelRend(){
     return (
@@ -582,15 +567,18 @@ class ChemistryApp extends Component {
   updateMainState(compoundX){
     //console.log(compoundX);
     //console.log(this.state.userSavedCompounds);
-
-    const newElements = this.state.userSavedCompounds[compoundX].elements;
-    const newMultipliers = this.state.userSavedCompounds[compoundX].multipliers;
-    const newTotal = parseFloat(this.state.userSavedCompounds[compoundX].total);
-
     this.setState({
-      elements: newElements,
-      multipliers: newMultipliers,
-      total: newTotal,
+      elements: this.state.userSavedCompounds[compoundX].elements,
+      multipliers: this.state.userSavedCompounds[compoundX].multipliers,
+      total: parseFloat(this.state.userSavedCompounds[compoundX].total),
+    }, ()=>{
+      if (this.state.user) {
+        firebase.database().ref('users/' + this.state.user.uid + '/compounds').once('value').then( snapshot => {
+          //Grab 'snapshot' of the users saved compounds.
+          const allCompounds = snapshot.val();
+          this.updateSavedCompounds(allCompounds);
+        });
+      }
     })
   }
   updateDeleted(compoundX){
@@ -621,12 +609,10 @@ class ChemistryApp extends Component {
   }
 
   render() {
-
     const notLogged = this.notLoggedHeader();
     const keyboard = this.keyboardRend();
     const selector = this.elemSelectorRend();
     const calcpanel = this.calcPanelRend();
-
     //If user is logged in
     if (this.state.logged){
       const logged = this.loggedHeader();
@@ -639,7 +625,6 @@ class ChemistryApp extends Component {
         </View>
       )
     }
-
     //Else if no one is logged in
     return (
       <View style={[styles.main]}>

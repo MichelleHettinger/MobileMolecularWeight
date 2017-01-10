@@ -20,13 +20,10 @@ export default class ElementCalculator extends Component {
 
     this.state = {
       saveModalVisible: false,
-
       chemicalName: '',
     }
 
-
     this.displayElements = this.displayElements.bind(this);
-
     this.saveModalVisible = this.saveModalVisible.bind(this);
     this.displayModalBody = this.displayModalBody.bind(this);
     this.grabChemicalName = this.grabChemicalName.bind(this);
@@ -57,12 +54,14 @@ export default class ElementCalculator extends Component {
       saveModalVisible: visisble,
     });
   }
+
   grabChemicalName(name){
     //console.log(name)
     this.setState({
       chemicalName:name,
     });
   }
+
   displayModalBody(){
     const elements = this.props.mainState.elements.map( (element, i) => {
       const multipliers = this.props.mainState.multipliers;
@@ -119,6 +118,7 @@ export default class ElementCalculator extends Component {
       </View>
     )
   }
+
   displaySavedCompounds(userCompounds){
     if (userCompounds != null) {
       //console.log(userCompounds);
@@ -169,12 +169,14 @@ export default class ElementCalculator extends Component {
           </View>
         )
       });
+      
       return compoundsMapped;
     }
     else {
       return
     }
   }
+
   saveMolecule(){
     const userID = this.props.mainState.user.uid;
     //If user has saved compounds, give it a name in database and write
@@ -246,6 +248,7 @@ export default class ElementCalculator extends Component {
       });
     }
   }
+
   loadSavedMolecule (compoundX) {
     //console.log(compoundX)
     this.setState({

@@ -20,10 +20,9 @@ export default class KeyboardComponent extends Component {
         <Button
           key={i}
           style={[styles.button]}
-          onPress={()=>this.props.getKeyPress(letter.toLowerCase())}>
-
+          onPress={()=>this.props.getKeyPress(letter.toLowerCase())}
+        >
           {letter.toUpperCase()}
-
         </Button>
       );
     });
@@ -52,50 +51,38 @@ export default class KeyboardComponent extends Component {
 const styles = StyleSheet.create({
   allRows: {
     width: width*0.96,
-
-    // borderRadius: 4,
-    // borderWidth: 1,
-    // borderColor: 'black',
   },
-
   button:{
     color: "white",
     backgroundColor: "grey",
-
     width: width*0.08,
     height: height*0.045,
     fontSize: height*0.03,
-
     marginLeft: width*0.006,
     marginRight: width*0.006,
   },
-
   inputText:{
     textAlign: 'center',
   },
   inputView:{
     height: height*0.03,
   },
-
   row1: {
     flexDirection: 'row',
     marginTop: height*0.006,
     marginBottom: height*0.003,
     marginLeft: width*0.018,
   },
-
   row2: {
     flexDirection: 'row',
     marginTop: height*0.006,
     marginBottom: height*0.006,
     marginLeft: width*0.065,
   },
-
   row3: {
     flexDirection: 'row',
     marginTop: height*0.003,
     marginBottom: height*0.006,
     marginLeft: width*0.12,
-
   }
 });
