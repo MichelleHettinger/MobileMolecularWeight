@@ -40,7 +40,7 @@ class ChemistryApp extends Component {
       user: {},
       userSavedCompounds: {},
       logged: false,
-      loginModalVisible: false,
+      loginModalVisible: true,
       accountModalVisible: false,
     };
 
@@ -73,6 +73,7 @@ class ChemistryApp extends Component {
     this.updateMainState = this.updateMainState.bind(this);
     this.updateDeleted = this.updateDeleted.bind(this);
     this.updateSavedCompounds = this.updateSavedCompounds.bind(this);
+    this.clearPanel = this.clearPanel.bind(this);
   }
 
   //LoginModal methods
@@ -180,14 +181,12 @@ class ChemistryApp extends Component {
     }
   }
   resetPassword(){
-    auth.sendPasswordResetEmail(this.state.email).catch(function(error){
-      //Error hapened
-      alert("Update error. " + error);
+    const user = firebase.auth().currentUser;
 
+    user.sendEmailVerification().catch(function(error){
+      alert('Error. ' + error);
     }).then((result)=>{
-      // Update successful.
-      //console.log("Email sent!")
-      //console.log(result);
+      alert('Email Sent!');
     })
   }
   //Methods getting data from other components
@@ -355,7 +354,7 @@ class ChemistryApp extends Component {
       }
     }
   }
-  //Methods for header when logged in
+  //Methods for header includes account modal
   loggedHeader(){
     //console.log(this.state.user)
     //Keep this conditional
@@ -474,7 +473,7 @@ class ChemistryApp extends Component {
 
     }.bind(this))
   }
-  //Methods for header when not logged in
+  //Methods for header includes login modal
   notLoggedHeader(){
     return(
       <View>
@@ -490,7 +489,7 @@ class ChemistryApp extends Component {
                 <Text style={[styles.centerBlack,{fontSize:height*0.045}]}>Mobile Molecular Weight</Text>
                 <Text style={[styles.centerBlack]}>Log in or create an account to save your molecules.</Text>
               </View>
-              <View style={[{marginLeft:width*0.1,marginBottom:height*0.01}]}>
+              <View style={[{marginLeft:width*0.1,marginBottom:height*0.03}]}>
                 <View style={[styles.flexRow,{marginLeft:width*0.16,width:width*0.85,height:height*0.055}]}>
                   <Text style={{color:'black'}}>Email:</Text>
                   <TextInput style={[styles.loginTextInput]}
@@ -509,15 +508,22 @@ class ChemistryApp extends Component {
                   />
                 </View>
               </View>
-              <View style={[styles.flexRow,{width:width*0.3,height:height*0.04,marginLeft:width*0.33}]}>
-                <View style={[{marginRight:width*0.03}]}>
+              <View style={[styles.flexRow,{justifyContent:'center',height:height*0.035}]}>
+                <View style={[{marginRight:width*0.04},styles.border]}>
                   <Button onPress={this.signup}>
-                    <Text style={{color:'black'}}>Sign Up</Text>
+                    <Text style={[styles.centerBlack,{marginLeft:width*0.01,marginRight:width*0.01}]}>Sign Up</Text>
                   </Button>
                 </View>
-                <View style={[]}>
+                <View style={[{marginLeft:width*0.04},styles.border]}>
                   <Button onPress={this.login}>
-                    <Text style={{color:'black'}}>Log In</Text>
+                    <Text style={[styles.centerBlack,{marginLeft:width*0.01,marginRight:width*0.01}]}>Log In</Text>
+                  </Button>
+                </View>
+              </View>
+              <View style={[{marginLeft:width*0.4,marginTop:width*0.1,height:height*0.035}]}>
+                <View style={[styles.border,{width:width*0.2}]}>
+                  <Button onPress={()=>this.setLoginModalVisible(false)}>
+                    <Text style={[styles.centerBlack,{marginLeft:width*0.01,marginRight:width*0.01}]}>Just Start</Text>
                   </Button>
                 </View>
               </View>
@@ -528,7 +534,7 @@ class ChemistryApp extends Component {
           <Text style={[styles.centerBlack,{fontSize:height*0.03}]}>Mobile Molecular Weight</Text>
           <View style={[{width:width*0.25,marginLeft:width*0.35}]}>
             <Button onPress={()=>this.setLoginModalVisible(true)}>
-              <Text style={[styles.centerBlack]}>Login/Sign Up</Text>
+              <Text style={[{textAlign:'center'}]}>Login/Sign Up</Text>
             </Button>
           </View>
         </View>
@@ -557,6 +563,7 @@ class ChemistryApp extends Component {
     return (
       <CalculatorPanel
         mainState={this.state}
+        clearPanel={this.clearPanel}
         getPlusMinus={this.getEdit}
         updateMainState={this.updateMainState}
         updateDeleted={this.updateDeleted}
@@ -606,6 +613,13 @@ class ChemistryApp extends Component {
     this.setState({
       userSavedCompounds: allCompounds
     });
+  }
+  clearPanel () {
+    this.setState({
+      elements: [],
+      multipliers: [],
+      total: 0,
+    })
   }
 
   render() {

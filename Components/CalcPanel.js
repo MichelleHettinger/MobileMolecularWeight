@@ -66,10 +66,10 @@ export default class ElementCalculator extends Component {
     const elements = this.props.mainState.elements.map( (element, i) => {
       const multipliers = this.props.mainState.multipliers;
       return (
-        <View  key={i}>
+        <View key={i}>
           <Text style={[{color:'black'}]} key={i}>
             {element.elementAcronym}
-            <Text style={[{color:'black', fontSize: 10}]} key={i}>
+            <Text style={[{color:'black',fontSize:10}]} key={i}>
               {multipliers[i]}
             </Text>
           </Text>
@@ -79,40 +79,57 @@ export default class ElementCalculator extends Component {
 
     const total = this.props.mainState.total.toFixed(3);
 
+    if(this.props.mainState.logged){
+      return (
+        <View>
+          <View style={[styles.border,{marginBottom:height*0.01}]}>
+            <Text style={[styles.centerBlack,{fontSize:height*0.045}]}>Mobile Molecular Weight</Text>
+            <View style={[styles.flexRow,{justifyContent:'center'}]}>
+              <Text style={[{color:'black'}]}>Save Your Compound!</Text>
+            </View>
+          </View>
+          <View style={[{marginLeft:width*0.1}]}>
+            <View style={[styles.flexRow]}>
+              <Text style={[{color:'black',width:width*0.17}]}>Weight:</Text>
+              <Text style={[{color:'black'},{marginLeft:width*0.01}]}>{total} g/mol</Text>
+            </View>
+            <View style={[styles.flexRow]}>
+              <Text style={[{color:'black',width:width*0.17}]}>Formula:</Text>
+              <View style={[styles.flexRow,{marginLeft:width*0.01}]}>
+                {elements}
+              </View>
+            </View>
+            <View style={[styles.flexRow]}>
+              <Text style={[{color:'black',width:width*0.17,height:height*0.03,marginTop:height*0.015}]}>Name: </Text>
+              <TextInput style={[{width:width*0.5, height:height*0.06}]}
+                underlineColorAndroid={'white'}
+                autoFocus={false}
+                onChangeText={this.grabChemicalName}
+                placeholder={"Compound Name"}
+              />
+              <View style={[styles.border,{height:height*0.037,width:width*0.1,marginTop:height*0.01}]}>
+                <Button onPress={this.saveMolecule}>
+                  <Text style={[styles.centerBlack]}>
+                    Save
+                  </Text>
+                </Button>
+              </View>
+            </View>
+          </View>
+        </View>
+      )
+    }
     return (
       <View>
         <View style={[styles.border,{marginBottom:height*0.01}]}>
           <Text style={[{fontSize:height*0.045}]}>Mobile Molecular Weight</Text>
           <View style={[styles.flexRow, {justifyContent:'center'}]}>
-            <Text style={[{color:'black'}]}>Save Your Compound!</Text>
+            <Text style={[styles.centerBlack]}>Save Your Compound!</Text>
           </View>
         </View>
         <View style={[{marginLeft:width*0.1}]}>
           <View style={[styles.flexRow]}>
-            <Text style={[{color:'black', width:width*0.17}]}>Weight: </Text>
-            <Text style={[{color:'black'}]}>{total} g/mol</Text>
-          </View>
-          <View style={[styles.flexRow]}>
-            <Text style={[{color:'black', width:width*0.17}]}>Formula: </Text>
-            <View style={[styles.flexRow]}>
-              {elements}
-            </View>
-          </View>
-          <View style={[styles.flexRow, {width:width}]}>
-            <Text style={[{color:'black', width:width*0.17, height:height*0.03, marginTop:height*0.015}]}>Name: </Text>
-            <TextInput style={[{width:width*0.5, height:height*0.06}]}
-              underlineColorAndroid={'white'}
-              autoFocus={true}
-              onChangeText={this.grabChemicalName}
-              placeholder={"Compound Name"}
-            />
-            <View style={[styles.border, {height:height*0.037, width:width*0.1, marginTop:height*0.01}]}>
-              <Button onPress={this.saveMolecule}>
-                <Text style={[{color:'black', textAlign:'center'}]}>
-                  Save
-                </Text>
-              </Button>
-            </View>
+            <Text style={[styles.centerBlack]}>You must first login to save your compound.</Text>
           </View>
         </View>
       </View>
@@ -143,26 +160,30 @@ export default class ElementCalculator extends Component {
           )
         });
         return (
-          <View key={i} style={[styles.border, {marginTop: width*0.05}]}>
+          <View key={i} style={[styles.border,{marginTop:width*0.05,width:width*0.96,marginLeft:width*0.02}]}>
             <View key={i} style={[]}>
               <View key={i} style={[]}>
-                <Text key={i} style={[{color:'black'}]}>
+                <Text key={i} style={[{color:'black',marginLeft:width*0.02}]}>
                   {compoundName} - {compoundTotal} g/mol
                 </Text>
               </View>
-              <View style={[styles.flexRow]}>
+              <View style={[styles.flexRow,{marginLeft:width*0.02}]}>
                 {molecFormula}
               </View>
             </View>
             <View style={[styles.flexRow, {justifyContent:'center'}]}>
-              <View style={[styles.border, {width: width*0.15, marginRight:width*0.05}]}>
+              <View style={[styles.border,{width:width*0.15,marginRight:width*0.05,marginTop:width*0.015,marginBottom:width*0.015}]}>
                 <Button onPress={()=>this.loadSavedMolecule(compoundX)}>
-                  <Text style={[{textAlign:'center'}]}>Load</Text>
+                  <Text style={[styles.centerBlack]}>
+                    Load
+                  </Text>
                 </Button>
               </View>
-              <View style={[styles.border, {width:width*0.15, marginLeft:width*0.05}]}>
+              <View style={[styles.border,{width:width*0.15, marginLeft:width*0.05,marginTop:width*0.015,marginBottom:width*0.015}]}>
                 <Button onPress={()=>this.props.updateDeleted(compoundX)}>
-                  <Text style={[{textAlign:'center'}]}>Delete</Text>
+                  <Text style={[styles.centerBlack]}>
+                    Delete
+                  </Text>
                 </Button>
               </View>
             </View>
@@ -262,43 +283,39 @@ export default class ElementCalculator extends Component {
     const elementsToDisplay = this.displayElements(this.props.mainState.elements);
     const userCompounds = this.displaySavedCompounds(this.props.mainState.userSavedCompounds);
     const modalBody = this.displayModalBody();
-    //If logged in
-    if (this.props.mainState.logged){
-      return (
-        <View style={[styles.border,{height:height*0.28,width:width*0.96}]}>
-          <View style={[styles.flexRow,{marginLeft:width*0.13,height:height*0.031,width:width*0.96}]}>
-            <Text style={[styles.centerBlack]}>
-              Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol
-            </Text>
-            <View>
-              <Modal
-                animationType={"none"} 
-                transparent={false}
-                visible={this.state.saveModalVisible}
-                onRequestClose={()=>this.saveModalVisible(false)}
-              >
-                {modalBody}
-                {userCompounds}
-              </Modal>
-            </View>
-            <View style={[{marginLeft:width*0.1}]}>
-              <Button onPress={()=>this.saveModalVisible(true)}>
-                <Text style={{color:'blue'}}>Save</Text>
-              </Button>
-            </View>
-          </View>
-          <View style={[styles.flexRow,{marginLeft:width*0.033}]}>
-            {elementsToDisplay}
-          </View>
-        </View>
-      )
-    }
+
     return (
       <View style={[styles.border,{height:height*0.28,width:width*0.96}]}>
-        <View style={[styles.flexRow,{marginLeft:width*0.13,height:height*0.031,width:width*0.96}]}>
-          <Text style={[styles.centerBlack]}>
+        <View style={[styles.flexRow,{height:height*0.031}]}>
+          <Text style={[{color:'black',marginLeft:width*0.02,width:width*0.65}]}>
             Molecular Weight: {this.props.mainState.total.toFixed(3)} g/mol
           </Text>
+          <View>
+            <Modal
+              animationType={"none"} 
+              transparent={false}
+              visible={this.state.saveModalVisible}
+              onRequestClose={()=>this.saveModalVisible(false)}
+            >
+              {modalBody}
+              {userCompounds}
+            </Modal>
+          </View>
+
+
+          <View style={[{marginLeft:width*0.02}]}>
+            <Button onPress={()=>this.saveModalVisible(true)}>
+              <Text style={{color:'blue'}}>Save</Text>
+            </Button>
+          </View>
+          <View style={[{marginLeft:width*0.05}]}>
+            <Button onPress={this.props.clearPanel}>
+              <Text style={{color:'grey'}}>Clear</Text>
+            </Button>
+          </View>
+
+
+
         </View>
         <View style={[styles.flexRow,{marginLeft:width*0.033}]}>
           {elementsToDisplay}
